@@ -52,10 +52,24 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 
 def generar_csv(filas, nombre_archivo):
+    """Genera el CSV para carga directa en KitApp (DNA), segun el formato
+    documentado en Formato_Archivo_Csv.pdf:
+    - delimitador ',' (coma), sin fila de encabezado.
+    - decimales con punto, nunca coma (la coma es el delimitador de columnas).
+    - filas de ITEM: las 15 columnas A-O.
+    - filas de SUBITEM: solo 6 columnas (A-F), sin rellenar el resto en blanco.
+    - sin comillas en el texto (no debe haber comas dentro de los campos)."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        writer.writerow(ENCABEZADOS)
+        writer = csv.writer(f, delimiter=",", lineterminator="\r\n", quoting=csv.QUOTE_MINIMAL)
         for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+            es_item = fila.get("A") == "N"
+            columnas = COL_ORDEN if es_item else COL_ORDEN[:6]
+            valores = []
+            for c in columnas:
+                v = fila.get(c)
+                if isinstance(v, str):
+                    v = v.replace(",", ".").replace('"', "").replace("'", "")
+                valores.append(v if v is not None else "")
+            writer.writerow(valores)
     return ruta_salida

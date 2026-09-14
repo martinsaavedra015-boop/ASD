@@ -58,8 +58,13 @@ def generar_csv(filas, nombre_archivo):
     - decimales con punto, nunca coma (la coma es el delimitador de columnas).
     - filas de ITEM: las 15 columnas A-O.
     - filas de SUBITEM: solo 6 columnas (A-F), sin rellenar el resto en blanco.
-    - sin comillas en el texto (no debe haber comas dentro de los campos)."""
+    - sin comillas en el texto (no debe haber comas dentro de los campos).
+    - los campos numericos del item (peso bruto/neto en columnas I y M) nunca
+      se dejan vacios -- el validador de la DNA rompe con un campo numerico
+      vacio -- se completan con "0.00" cuando la factura no trae el dato
+      (queda igual aclarado en NOTAS para completar con packing list/B-L)."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
+    CAMPOS_NUMERICOS_ITEM = {"I", "M"}
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f, delimiter=",", lineterminator="\r\n", quoting=csv.QUOTE_MINIMAL)
         for fila in filas:
@@ -70,6 +75,8 @@ def generar_csv(filas, nombre_archivo):
                 v = fila.get(c)
                 if isinstance(v, str):
                     v = v.replace(",", ".").replace('"', "").replace("'", "")
+                if (v is None or v == "") and es_item and c in CAMPOS_NUMERICOS_ITEM:
+                    v = "0.00"
                 valores.append(v if v is not None else "")
             writer.writerow(valores)
     return ruta_salida

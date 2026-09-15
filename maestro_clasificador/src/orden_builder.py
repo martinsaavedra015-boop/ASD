@@ -58,6 +58,8 @@ def mapear_unidad(texto_factura):
         "docena": "09", "docenas": "09", "dozen": "09",
         "metro": "02", "metros": "02", "m": "02",
         "m2": "03", "m3": "04",
+        "mt": "29", "tm": "29", "ton": "29", "tons": "29",
+        "tonelada": "29", "toneladas": "29", "mts": "29",
     }
     codigo = equivalencias.get(t)
     if codigo:

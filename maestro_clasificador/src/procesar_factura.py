@@ -1,7 +1,7 @@
 """Agrupa lineas de factura por NCM en items+subitems (punto 46 del
 instructivo maestro) y arma las filas finales listas para el ORDEN."""
 from collections import OrderedDict
-from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
+from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formato_numero, formatear_ncm
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
@@ -11,12 +11,14 @@ def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_text
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
     desc_oficial = descripcion_oficial(codigo_ncm)
     columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
-    cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
+    cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_numero(cantidad_total)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,
-        "F": formato_decimal(fob_total), "G": cant_txt, "H": cant_txt,
-        "I": peso_bruto or "", "J": nuevo_usado, "K": pais_origen, "L": pais_procedencia,
-        "M": peso_neto or "", "N": marca_libre, "O": nombre_marca,
+        "F": formato_numero(fob_total), "G": cant_txt, "H": cant_txt,
+        "I": formato_numero(peso_bruto) if peso_bruto not in (None, "") else "",
+        "J": nuevo_usado, "K": pais_origen, "L": pais_procedencia,
+        "M": formato_numero(peso_neto) if peso_neto not in (None, "") else "",
+        "N": marca_libre, "O": nombre_marca,
     }
 
 
@@ -27,12 +29,12 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     estadistica subitem."""
     desc_limpia = limpiar_texto(descripcion)
     return {
-        "A": str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad),
-        "B": formato_decimal(fob),
+        "A": formato_numero(cantidad),
+        "B": formato_numero(fob),
         "C": marca_libre,
         "D": nombre_marca,
         "E": desc_limpia,
-        "F": str(int(cantidad_estadistica)) if float(cantidad_estadistica).is_integer() else formato_decimal(cantidad_estadistica),
+        "F": formato_numero(cantidad_estadistica),
         "G": "", "H": "", "I": "", "J": "", "K": "", "L": "", "M": "", "N": "", "O": "",
     }
 

@@ -27,6 +27,17 @@ def formato_decimal(numero):
     return f"{numero:.2f}".replace(".", ",")
 
 
+def formato_numero(numero):
+    """Numero con coma decimal sin ceros de relleno (columnas numericas del
+    ORDEN: MONTO FOB, CANTIDAD, PESO). Ej: 23011.20 -> '23011,2',
+    24480.00 -> '24480'."""
+    n = float(numero)
+    if n == int(n):
+        return str(int(n))
+    texto = f"{n:.6f}".rstrip("0").rstrip(".")
+    return texto.replace(".", ",")
+
+
 UNIDADES = {
     "03": "METRO CUADRADO", "04": "METRO CUBICO", "02": "METROS", "50": "MICROCURIE",
     "49": "MILICURIE", "68": "MILIGRAMO", "67": "MILILITRO", "11": "MILLAR", "08": "PAR",

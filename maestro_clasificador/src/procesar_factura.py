@@ -45,13 +45,16 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
 
     Devuelve: (filas [lista de dicts columna->valor], notas [lista de str])
     """
+    # Agrupa por NCM + unidad: si un mismo NCM viene en unidades distintas
+    # (ej. tubos en UN y en M) no se pueden sumar cantidades en un item.
     grupos = OrderedDict()
     for linea in lineas:
-        grupos.setdefault(linea["codigo_ncm"], []).append(linea)
+        clave = (linea["codigo_ncm"], mapear_unidad(linea["unidad_texto_factura"])[0])
+        grupos.setdefault(clave, []).append(linea)
 
     filas, notas = [], []
 
-    for codigo_ncm, grupo in grupos.items():
+    for (codigo_ncm, _unidad), grupo in grupos.items():
         unidad_codigo, unidad_texto = mapear_unidad(grupo[0]["unidad_texto_factura"])
         pais_origen = grupo[0]["pais_origen"]
         pais_procedencia = grupo[0].get("pais_procedencia", pais_origen)

@@ -37,11 +37,29 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     }
 
 
-def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre="ML"):
+def prorratear(total, pesos_relativos):
+    """Reparte `total` proporcional a `pesos_relativos` con 2 decimales,
+    ajustando por mayor resto para que la suma cierre exacta."""
+    base = sum(pesos_relativos)
+    centavos = round(total * 100)
+    exactos = [centavos * p / base for p in pesos_relativos]
+    partes = [int(e) for e in exactos]
+    faltan = centavos - sum(partes)
+    for i in sorted(range(len(exactos)), key=lambda i: exactos[i] - partes[i], reverse=True)[:faltan]:
+        partes[i] += 1
+    return [c / 100 for c in partes]
+
+
+def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre="ML",
+                     pesos_totales=None):
     """lineas: lista de dicts ya clasificados, cada uno con:
     codigo_ncm, descripcion_factura, cantidad, unidad_texto_factura, fob,
     pais_origen, pais_procedencia (opcional), nombre_marca, peso_bruto
     (opcional), peso_neto (opcional).
+
+    pesos_totales: (peso_bruto, peso_neto) totales del packing list/B/L.
+    Si se pasa, se prorratean entre los items segun su valor FOB (solo
+    cuando el usuario lo pide: por default el peso nunca se estima).
 
     Devuelve: (filas [lista de dicts columna->valor], notas [lista de str])
     """
@@ -53,6 +71,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         grupos.setdefault(clave, []).append(linea)
 
     filas, notas = [], []
+    items_fob = []  # (indice de fila item, fob total) para prorrateo de pesos
 
     for (codigo_ncm, _unidad), grupo in grupos.items():
         unidad_codigo, unidad_texto = mapear_unidad(grupo[0]["unidad_texto_factura"])
@@ -66,6 +85,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
             linea = grupo[0]
             cant_str = int(linea["cantidad"]) if unidad_texto == "UNIDAD" else linea["cantidad"]
             cierre = f'EN "{cant_str}" "{unidad_texto}" {limpiar_texto(linea["descripcion_factura"])}'
+            items_fob.append((len(filas), linea["fob"]))
             filas.append(_fila_item(
                 codigo_ncm, linea["cantidad"], linea["fob"], unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
@@ -76,6 +96,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
             fob_total = sum(l["fob"] for l in grupo)
             cant_str = int(cantidad_total) if unidad_texto == "UNIDAD" else cantidad_total
             cierre = f'EN "{cant_str}" "{unidad_texto}" DETALLADO EN SUBITEM'
+            items_fob.append((len(filas), fob_total))
             filas.append(_fila_item(
                 codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
@@ -91,9 +112,20 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
                 f"con {len(grupo)} subitems (mismo NCM)."
             )
 
-        if not peso_bruto and not peso_neto:
+        if not peso_bruto and not peso_neto and not pesos_totales:
             notas.append(
                 f"Partida {codigo_ncm}: peso bruto/neto en blanco, completar con packing list o B/L."
             )
+
+    if pesos_totales:
+        bruto_total, neto_total = pesos_totales
+        fobs = [f for _, f in items_fob]
+        for (idx, _), bruto, neto in zip(items_fob, prorratear(bruto_total, fobs), prorratear(neto_total, fobs)):
+            filas[idx]["I"] = formato_decimal(bruto)
+            filas[idx]["M"] = formato_decimal(neto)
+        notas.append(
+            f"Pesos prorrateados por valor FOB entre {len(items_fob)} items: bruto total "
+            f"{formato_decimal(bruto_total)} kg, neto total {formato_decimal(neto_total)} kg."
+        )
 
     return filas, notas

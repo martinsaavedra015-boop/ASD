@@ -51,11 +51,18 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     return ruta_salida
 
 
+def _sin_comillas(valor):
+    return " ".join(str(valor).replace('"', " ").replace(";", " ").split()) if valor else valor
+
+
 def generar_csv(filas, nombre_archivo):
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
+        # SOFIA no admite comillas (las carga como espacio): ningun campo
+        # debe llevar comillas ni el delimitador, asi el csv no las agrega.
+        writer = csv.writer(f, delimiter=";", lineterminator="\r\n",
+                            quoting=csv.QUOTE_NONE, escapechar=None)
         writer.writerow(ENCABEZADOS)
         for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+            writer.writerow([_sin_comillas(fila[c]) for c in COL_ORDEN])
     return ruta_salida

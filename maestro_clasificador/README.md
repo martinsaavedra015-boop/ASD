@@ -88,6 +88,11 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Decimales con coma**, no punto (`23730,00`, formato paraguayo) — el CSV
   usa `;` como delimitador precisamente para poder llevar comas dentro de
   los campos sin romper la estructura.
+- **Sin comillas** en la descripcion ni en ningun campo del CSV: SOFIA no
+  las admite y las carga como espacio. El cierre va `EN 550 UNIDAD ...`,
+  nunca `EN "550" "UNIDAD" ...`.
+- **Descripcion del item: maximo 200 caracteres** (columna LARTMERCAD de
+  SOFIA, error ORA-12899). Si se pasa, se recorta el texto del Arancel.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

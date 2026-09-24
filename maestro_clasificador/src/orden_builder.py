@@ -108,9 +108,9 @@ def construir_fila_orden(item):
     cantidad = item["cantidad"]
     unidad_texto = item.get("unidad_texto", "UNIDAD")
     if item.get("descripcion_producto"):
-        cierre = f'EN "{cantidad}" "{unidad_texto}" {limpiar_texto(item["descripcion_producto"])}'
+        cierre = f'EN {cantidad} {unidad_texto} {limpiar_texto(item["descripcion_producto"])}'
     else:
-        cierre = f'EN "{cantidad}" "{unidad_texto}"'
+        cierre = f'EN {cantidad} {unidad_texto}'
     columna_d = f"{desc_oficial} {cierre}"
 
     return {

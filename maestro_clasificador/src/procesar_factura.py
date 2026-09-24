@@ -4,13 +4,29 @@ from collections import OrderedDict
 from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
+MAX_DESCRIPCION = 200  # limite de la columna LARTMERCAD en SOFIA (ORA-12899)
+_ENLACES = {"A", "AL", "AUNQUE", "CON", "DE", "DEL", "E", "EL", "EN", "INCLUSO",
+            "LA", "LAS", "LOS", "O", "PARA", "POR", "SIN", "U", "Y"}
+
+
+def _recortar_oficial(desc_oficial, descripcion_cierre, maximo=MAX_DESCRIPCION):
+    """Si la columna D supera el limite de SOFIA, recorta el texto oficial
+    del Arancel en limite de palabra; el cierre (cantidad, unidad y
+    descripcion de factura) nunca se recorta."""
+    disponible = maximo - len(descripcion_cierre) - 1
+    if len(desc_oficial) <= disponible:
+        return desc_oficial
+    palabras = desc_oficial[:disponible + 1].rsplit(" ", 1)[0].split()
+    while palabras and palabras[-1] in _ENLACES:
+        palabras.pop()  # no dejar "... AUNQUE", "... DE", etc. colgando
+    return " ".join(palabras)
 
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
-    desc_oficial = descripcion_oficial(codigo_ncm)
-    columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
+    desc_oficial = _recortar_oficial(descripcion_oficial(codigo_ncm), descripcion_cierre)
+    columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()[:MAX_DESCRIPCION]
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,

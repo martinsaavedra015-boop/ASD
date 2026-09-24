@@ -11,12 +11,13 @@ def quitar_tildes(texto):
 
 def limpiar_texto(texto):
     """Mayusculas, sin tildes, sin periodos, comas ni guiones (solo
-    espacios), sin comillas. (Confirmado por Martin: nunca puntos ni
+    espacios), sin comillas, sin punto y coma (delimitador del CSV) ni
+    corchetes/guion bajo. (Confirmado por Martin: nunca puntos ni
     guiones ni comas en la descripcion, pese al ejemplo con typo del
     instructivo original.)"""
     t = quitar_tildes(texto).upper()
     t = t.replace('"', "").replace("'", "")
-    t = re.sub(r"[.,\-]", " ", t)
+    t = re.sub(r"[.,;\-\[\]_]", " ", t)
     t = re.sub(r"\s+", " ", t).strip()
     return t
 

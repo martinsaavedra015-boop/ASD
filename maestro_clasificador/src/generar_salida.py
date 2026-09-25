@@ -57,7 +57,9 @@ def _sin_comillas(valor):
 
 def generar_csv(filas, nombre_archivo):
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
+    # Mismo formato que Excel "CSV (delimitado por comas)": ANSI/Windows-1252,
+    # sin BOM, fin de linea CRLF (no "CSV UTF-8").
+    with open(ruta_salida, "w", newline="", encoding="cp1252", errors="replace") as f:
         # SOFIA no admite comillas (las carga como espacio): ningun campo
         # debe llevar comillas ni el delimitador, asi el csv no las agrega.
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n",

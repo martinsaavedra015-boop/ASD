@@ -85,6 +85,9 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 
 - **Tasa de referencia: siempre ANV**, nunca AEC (AEC es solo dato de
   contexto).
+- **CSV = formato Excel "CSV (delimitado por comas)"**: ANSI/Windows-1252,
+  sin BOM, CRLF (no "CSV UTF-8"). Separador de campos `;` (el separador
+  de lista de Windows con configuracion regional de Paraguay).
 - **Decimales con coma**, no punto (`23730,00`, formato paraguayo) — el CSV
   usa `;` como delimitador precisamente para poder llevar comas dentro de
   los campos sin romper la estructura.

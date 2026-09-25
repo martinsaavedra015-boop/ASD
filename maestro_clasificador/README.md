@@ -91,6 +91,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Sin comillas** en la descripcion ni en ningun campo del CSV: SOFIA no
   las admite y las carga como espacio. El cierre va `EN 550 UNIDAD ...`,
   nunca `EN "550" "UNIDAD" ...`.
+- **Cantidad en la descripcion sin decimales** si es entera
+  (`EN 6000 KILOGRAMO`): SOFIA elimina la coma y `6000,00` queda `600000`.
 - **Descripcion del item: maximo 200 caracteres** (columna LARTMERCAD de
   SOFIA, error ORA-12899). Si se pasa, se recorta el texto del Arancel.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".

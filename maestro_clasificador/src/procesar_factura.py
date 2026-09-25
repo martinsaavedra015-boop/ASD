@@ -22,6 +22,15 @@ def _recortar_oficial(desc_oficial, descripcion_cierre, maximo=MAX_DESCRIPCION):
     return " ".join(palabras)
 
 
+def _cantidad_descripcion(cantidad, unidad_texto):
+    """Cantidad para el texto de la columna D. SOFIA elimina la coma en la
+    descripcion ('6000,00' queda '600000'), asi que si es entera va sin
+    decimales."""
+    if unidad_texto == "UNIDAD" or float(cantidad).is_integer():
+        return str(int(cantidad))
+    return formato_decimal(cantidad)
+
+
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
@@ -77,7 +86,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
 
         if len(grupo) == 1:
             linea = grupo[0]
-            cant_str = int(linea["cantidad"]) if unidad_texto == "UNIDAD" else formato_decimal(linea["cantidad"])
+            cant_str = _cantidad_descripcion(linea["cantidad"], unidad_texto)
             cierre = f'EN {cant_str} {unidad_texto} {limpiar_texto(linea["descripcion_factura"])}'
             filas.append(_fila_item(
                 codigo_ncm, linea["cantidad"], linea["fob"], unidad_codigo, unidad_texto,
@@ -87,7 +96,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         else:
             cantidad_total = sum(l["cantidad"] for l in grupo)
             fob_total = sum(l["fob"] for l in grupo)
-            cant_str = int(cantidad_total) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
+            cant_str = _cantidad_descripcion(cantidad_total, unidad_texto)
             cierre = f'EN {cant_str} {unidad_texto} DETALLADO EN SUBITEM'
             filas.append(_fila_item(
                 codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,

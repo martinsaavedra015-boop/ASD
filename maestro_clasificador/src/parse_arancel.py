@@ -51,14 +51,21 @@ def _parsear_arancel():
                 continue
             else:
                 # Fila sin codigo en columna A: es la continuacion de la
-                # descripcion del ultimo NCM (la fila se corta en dos
-                # renglones) si trae datos de AEC/ANV/OMC, o si el
-                # anterior directamente no tenia descripcion todavia.
-                # Ambos casos son la misma partida, no una nota aparte.
+                # descripcion del ultimo NCM (la fila se corta en dos o mas
+                # renglones) si trae datos de AEC/ANV/OMC, o si el ultimo
+                # NCM todavia no recibio sus tasas (renglon intermedio de
+                # una descripcion larga, ej. 3401.30.00). Todos esos casos
+                # son la misma partida, no una nota aparte.
                 aec = row[2] if len(row) > 2 else None
                 anv = row[3] if len(row) > 3 else None
                 omc = row[4] if len(row) > 4 else None
-                if ultimo_codigo is not None and (aec is not None or anv is not None or omc is not None):
+                trae_tasas = aec is not None or anv is not None or omc is not None
+                sin_tasas_aun = (
+                    ultimo_codigo is not None
+                    and len(ultimo_codigo.replace(".", "")) >= 7  # solo lineas arancelarias, no partidas de 4/6
+                    and all(records[ultimo_codigo][k] is None for k in ("aec", "anv", "omc"))
+                )
+                if ultimo_codigo is not None and (trae_tasas or sin_tasas_aun):
                     rec = records[ultimo_codigo]
                     rec["descripcion"] = f'{rec["descripcion"]} {text}'.strip()
                     if aec is not None:

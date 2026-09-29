@@ -1,7 +1,6 @@
 """Genera el archivo final XLSX (hojas ORDEN + NOTAS) y CSV a partir de las
 filas ya armadas por procesar_factura.py / orden_builder.py."""
 import os
-import csv
 import openpyxl
 from openpyxl.styles import Font, Alignment
 from config import OUTPUT_DIR
@@ -52,10 +51,15 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 
 def generar_csv(filas, nombre_archivo):
+    """CSV con ';' y valores tal cual, sin comillas de escape: el csv
+    estandar envolvia la descripcion en comillas y duplicaba las comillas
+    internas (EN ""6"" ""UNIDAD""), lo que rompe la carga en el sistema."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        writer.writerow(ENCABEZADOS)
-        for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+    registros = [ENCABEZADOS] + [[str(fila[c]) for c in COL_ORDEN] for fila in filas]
+    with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
+        for registro in registros:
+            for valor in registro:
+                if ";" in valor or "\n" in valor or "\r" in valor:
+                    raise ValueError(f"Valor con ';' o salto de linea, rompe el CSV: {valor!r}")
+            f.write(";".join(registro) + "\r\n")
     return ruta_salida

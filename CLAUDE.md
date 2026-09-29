@@ -29,9 +29,11 @@ implícito es correr el flujo de `maestro_clasificador`:
 4. Si llega también un **Certificado de Origen MERCOSUR** u otro documento
    de la misma operación, ese documento manda sobre cualquier suposición
    previa — reclasificar y actualizar `registro_ncm` si corresponde.
-5. Procesar con `procesar_factura.procesar_factura(...)` y generar el XLSX
-   con `generar_salida.generar_orden_notas(...)` en `salidas/`, y entregar
-   el archivo al usuario.
+5. Procesar con `procesar_factura.procesar_factura(...)` y generar **siempre
+   los dos archivos** en `salidas/`: el XLSX con
+   `generar_salida.generar_orden_notas(...)` **y el CSV** con
+   `generar_salida.generar_csv(...)` (sin fila de titulos y sin comillas). Entregar ambos
+   al usuario — nunca solo el XLSX.
 
 Los archivos de referencia (`data/`) se indexan una sola vez y quedan en
 `cache/` — no volver a parsear el Arancel/Notas Explicativas si el cache ya

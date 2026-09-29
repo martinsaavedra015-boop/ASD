@@ -51,11 +51,24 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     return ruta_salida
 
 
-def generar_csv(filas, nombre_archivo):
+def _valor_csv(valor):
+    """Sin comillas y sin ';' (el delimitador) dentro del campo."""
+    texto = "" if valor is None else str(valor)
+    texto = texto.replace('"', "").replace(";", " ")
+    return " ".join(texto.split())
+
+
+def generar_csv(filas, nombre_archivo, con_encabezado=False):
+    """CSV sin fila de titulos por default y sin comillas (confirmado por el
+    usuario: solo las filas de datos, sin comillas de ningun tipo — ni las
+    del CSV ni las de EN "cantidad" "unidad", que solo van en el XLSX). Sin
+    BOM, asi la primera celda no arrastra caracteres invisibles al importar."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        writer.writerow(ENCABEZADOS)
+    with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f, delimiter=";", lineterminator="\r\n",
+                            quoting=csv.QUOTE_NONE, escapechar="\\")
+        if con_encabezado:
+            writer.writerow(ENCABEZADOS)
         for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+            writer.writerow([_valor_csv(fila[c]) for c in COL_ORDEN])
     return ruta_salida

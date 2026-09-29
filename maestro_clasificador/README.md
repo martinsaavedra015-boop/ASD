@@ -58,12 +58,14 @@ borrá el cache correspondiente para que se regenere.
    FOB + país + marca + descripción tal como viene en la factura).
 3. **Procesar la factura**: `procesar_factura.procesar_factura(lineas)` —
    agrupa por NCM, arma items/subitems, devuelve filas + notas.
-4. **Generar el archivo final**:
-   `generar_salida.generar_orden_notas(filas, notas, "nombre.xlsx")`.
+4. **Generar los archivos finales (siempre los dos)**:
+   `generar_salida.generar_orden_notas(filas, notas, "nombre.xlsx")` y
+   `generar_salida.generar_csv(filas, "nombre.csv")` — el CSV va sin fila
+   de titulos y sin comillas (solo datos).
 
 ```python
 from procesar_factura import procesar_factura
-from generar_salida import generar_orden_notas
+from generar_salida import generar_orden_notas, generar_csv
 
 lineas = [
     {
@@ -79,6 +81,7 @@ lineas = [
 ]
 filas, notas = procesar_factura(lineas)
 generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
+generar_csv(filas, "ORDEN_ejemplo.csv")
 ```
 
 ## Reglas de negocio importantes (ya confirmadas, no volver a preguntar)

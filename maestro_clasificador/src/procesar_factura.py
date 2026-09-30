@@ -45,13 +45,15 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
 
     Devuelve: (filas [lista de dicts columna->valor], notas [lista de str])
     """
+    # Un item = misma posicion Y mismo pais de origen: lineas con el mismo
+    # NCM pero distinto origen van en items separados.
     grupos = OrderedDict()
     for linea in lineas:
-        grupos.setdefault(linea["codigo_ncm"], []).append(linea)
+        grupos.setdefault((linea["codigo_ncm"], linea["pais_origen"]), []).append(linea)
 
     filas, notas = [], []
 
-    for codigo_ncm, grupo in grupos.items():
+    for (codigo_ncm, _origen), grupo in grupos.items():
         unidad_codigo, unidad_texto = mapear_unidad(grupo[0]["unidad_texto_factura"])
         pais_origen = grupo[0]["pais_origen"]
         pais_procedencia = grupo[0].get("pais_procedencia", pais_origen)

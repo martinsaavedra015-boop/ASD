@@ -85,6 +85,7 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 
 - **Tasa de referencia: siempre ANV**, nunca AEC (AEC es solo dato de
   contexto).
+- **CSV: sin fila de títulos y sin comillas** en ningún campo (el `EN "X" "UNIDAD"` va como `EN X UNIDAD`). Solo filas de items/subitems.
 - **Decimales con coma**, no punto (`23730,00`, formato paraguayo) — el CSV
   usa `;` como delimitador precisamente para poder llevar comas dentro de
   los campos sin romper la estructura.

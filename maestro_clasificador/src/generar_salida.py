@@ -51,11 +51,14 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 
 def generar_csv(filas, nombre_archivo):
-    """CSV con ';' y valores tal cual, sin comillas de escape: el csv
-    estandar envolvia la descripcion en comillas y duplicaba las comillas
-    internas (EN ""6"" ""UNIDAD""), lo que rompe la carga en el sistema."""
+    """CSV para carga en el sistema (confirmado por el usuario):
+    - SIN fila de encabezados/titulos: solo items y subitems.
+    - SIN comillas en ningun campo (ni de escape ni el EN "X" "UNIDAD" de
+      la descripcion, que en el CSV va como EN X UNIDAD). El XLSX si
+      conserva las comillas del punto 10 del instructivo.
+    - Separador ';', decimales con coma."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    registros = [ENCABEZADOS] + [[str(fila[c]) for c in COL_ORDEN] for fila in filas]
+    registros = [[str(fila[c]).replace('"', "") for c in COL_ORDEN] for fila in filas]
     with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
         for registro in registros:
             for valor in registro:

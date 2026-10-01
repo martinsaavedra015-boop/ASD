@@ -5,12 +5,30 @@ from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, for
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
+# SOFIA (KIT_ART.LARTMERCAD) acepta como maximo 200 caracteres en la
+# descripcion de item/subitem; mas largo da ORA-12899 al cargar el CSV.
+MAX_DESC = 200
+
+
+def recortar(texto, maximo=MAX_DESC):
+    """Recorta a 'maximo' caracteres en limite de palabra. Si la descripcion
+    termina en DETALLADO EN SUBITEM, ese cierre se conserva."""
+    if len(texto) <= maximo:
+        return texto
+    sufijo = " DETALLADO EN SUBITEM"
+    if texto.endswith(sufijo):
+        return recortar(texto[: -len(sufijo)], maximo - len(sufijo)) + sufijo
+    corte = texto[:maximo]
+    if texto[maximo] != " " and " " in corte:
+        corte = corte[: corte.rindex(" ")]
+    return corte.rstrip()
+
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
     desc_oficial = descripcion_oficial(codigo_ncm)
-    columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
+    columna_d = recortar(f'{desc_oficial} {descripcion_cierre}'.strip())
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,
@@ -25,7 +43,7 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     instructivo): A=cantidad subitem, B=FOB subitem, C=marca libre,
     D=nombre marca, E=descripcion (verbatim factura), F=cantidad
     estadistica subitem."""
-    desc_limpia = limpiar_texto(descripcion)
+    desc_limpia = recortar(limpiar_texto(descripcion))
     return {
         "A": str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad),
         "B": formato_decimal(fob),

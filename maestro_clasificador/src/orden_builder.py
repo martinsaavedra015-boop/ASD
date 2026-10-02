@@ -17,7 +17,11 @@ def limpiar_texto(texto):
     instructivo original.)"""
     t = quitar_tildes(texto).upper()
     t = t.replace('"', "").replace("'", "")
+    # Decimales entre digitos (2.4, 4,75) se conservan con punto; el resto
+    # de la puntuacion se elimina.
+    t = re.sub(r"(?<=\d)[.,](?=\d)", "\x00", t)
     t = re.sub(r"[.,;\-\[\]_]", " ", t)
+    t = t.replace("\x00", ".")
     t = re.sub(r"\s+", " ", t).strip()
     return t
 

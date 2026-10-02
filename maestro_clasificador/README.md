@@ -94,6 +94,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Sin comillas** en la descripcion ni en ningun campo del CSV: SOFIA no
   las admite y las carga como espacio. El cierre va `EN 550 UNIDAD ...`,
   nunca `EN "550" "UNIDAD" ...`.
+- **Decimales dentro de la descripcion con punto** (`VIRTUS 2.4`, `4.75 MM`):
+  la coma la elimina SOFIA. En prueba.
 - **Cantidad en la descripcion sin decimales** si es entera
   (`EN 6000 KILOGRAMO`): SOFIA elimina la coma y `6000,00` queda `600000`.
 - **Codigos de pais que faltan en `CODIGO_DE_PAISES.xlsx`** (confirmados):

@@ -64,7 +64,7 @@ def generar_csv(filas, nombre_archivo):
         # debe llevar comillas ni el delimitador, asi el csv no las agrega.
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n",
                             quoting=csv.QUOTE_NONE, escapechar=None)
-        writer.writerow(ENCABEZADOS)
+        # Sin fila de titulos: SOFIA toma el CSV directo desde la primera fila.
         for fila in filas:
             writer.writerow([_sin_comillas(fila[c]) for c in COL_ORDEN])
     return ruta_salida

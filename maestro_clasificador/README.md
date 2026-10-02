@@ -96,6 +96,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   nunca `EN "550" "UNIDAD" ...`.
 - **Cantidad en la descripcion sin decimales** si es entera
   (`EN 6000 KILOGRAMO`): SOFIA elimina la coma y `6000,00` queda `600000`.
+- **Codigos de pais que faltan en `CODIGO_DE_PAISES.xlsx`** (confirmados):
+  TAIWAN = 736.
 - **Descripcion del item: maximo 200 caracteres** (columna LARTMERCAD de
   SOFIA, error ORA-12899). Si se pasa, se recorta el texto del Arancel.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".

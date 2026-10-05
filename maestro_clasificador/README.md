@@ -86,8 +86,11 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Tasa de referencia: siempre ANV**, nunca AEC (AEC es solo dato de
   contexto).
 - **Decimales con coma**, no punto (`23730,00`, formato paraguayo).
-- **CSV delimitado por COMAS** (no `;`): los campos que llevan coma decimal
-  van entre comillas (`"23730,00"`), formato CSV estándar.
+- **CSV para la DNA (KitApp)**: delimitado por COMAS, sin títulos, 15
+  columnas por fila, **sin comillas de escape y decimales con punto**
+  (`23730.00`) — el validador de la DNA parte por todas las comas y no
+  entiende comillas, así que ningún campo puede llevar coma (el XLSX sí
+  mantiene la coma decimal).
 - **CSV sin fila de títulos**: `generar_csv` no escribe encabezados —
   el archivo arranca directo con la primera fila de datos.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".

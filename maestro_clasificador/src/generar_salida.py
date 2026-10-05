@@ -1,7 +1,7 @@
 """Genera el archivo final XLSX (hojas ORDEN + NOTAS) y CSV a partir de las
 filas ya armadas por procesar_factura.py / orden_builder.py."""
 import os
-import csv
+import re
 import openpyxl
 from openpyxl.styles import Font, Alignment
 from config import OUTPUT_DIR
@@ -51,15 +51,32 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     return ruta_salida
 
 
+_NUMERO_COMA_RE = re.compile(r"^\d+,\d+$")
+
+
+def _campo_csv_dna(valor):
+    """El validador de la DNA (KitApp) parte cada linea por TODAS las comas
+    y no interpreta comillas CSV. Por eso: decimales con punto (solo en el
+    CSV; el XLSX mantiene la coma), sin comillas de escape, y ninguna coma
+    dentro de un campo."""
+    v = "" if valor is None else str(valor)
+    if _NUMERO_COMA_RE.match(v):
+        v = v.replace(",", ".")
+    if "," in v or "\n" in v or "\r" in v:
+        raise ValueError(f"Campo con coma o salto de linea, rompe el CSV de la DNA: {v!r}")
+    return v
+
+
 def generar_csv(filas, nombre_archivo, con_encabezado=False):
-    """CSV para carga: delimitado por COMAS y SIN fila de titulos
-    (confirmado por el usuario). Los campos con coma decimal (montos,
-    pesos) quedan entre comillas, como hace Excel en un CSV estandar."""
+    """CSV para subir a la DNA (KitApp > Gestionar Item Provisorio):
+    delimitado por COMAS, SIN fila de titulos, 15 columnas por fila, sin
+    comillas de escape, decimales con punto, sin BOM."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=",", lineterminator="\r\n")
-        if con_encabezado:
-            writer.writerow(ENCABEZADOS)
-        for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+    lineas = []
+    if con_encabezado:
+        lineas.append(",".join(ENCABEZADOS))
+    for fila in filas:
+        lineas.append(",".join(_campo_csv_dna(fila[c]) for c in COL_ORDEN))
+    with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
+        f.write("\r\n".join(lineas) + "\r\n")
     return ruta_salida

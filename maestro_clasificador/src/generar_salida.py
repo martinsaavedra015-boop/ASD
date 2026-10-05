@@ -51,11 +51,14 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     return ruta_salida
 
 
-def generar_csv(filas, nombre_archivo):
+def generar_csv(filas, nombre_archivo, con_encabezado=False):
+    """CSV para carga: SIN fila de titulos por default (confirmado por el
+    usuario — el sistema de carga toma la primera fila como dato)."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        writer.writerow(ENCABEZADOS)
+        if con_encabezado:
+            writer.writerow(ENCABEZADOS)
         for fila in filas:
             writer.writerow([fila[c] for c in COL_ORDEN])
     return ruta_salida

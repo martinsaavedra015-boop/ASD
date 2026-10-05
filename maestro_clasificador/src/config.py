@@ -24,4 +24,6 @@ ARANCEL_CACHE_JSON = os.path.join(CACHE_DIR, "arancel_index.json")
 NOTAS_CACHE_JSON = os.path.join(CACHE_DIR, "notas_chunks.json")
 
 REGISTRO_NCM_JSON = os.path.join(CACHE_DIR, "ncm_confirmados.json")
-IDENTIFICADORES_APRENDIDOS_JSON = os.path.join(CACHE_DIR, "identificadores_aprendidos.json")
+# En data/ (versionado en git), no en cache/: son datos confirmados por el
+# usuario en KitApp y no se pueden regenerar.
+IDENTIFICADORES_APRENDIDOS_JSON = os.path.join(DATA_DIR, "identificadores_confirmados.json")

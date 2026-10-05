@@ -112,6 +112,13 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   NOTAS como ESTIMADO, con la base del cálculo, para reemplazar cuando
   llegue el packing list. Cada línea lleva su `peso_bruto`/`peso_neto`
   numérico y `procesar_factura` suma los pesos de todas las líneas del ítem.
+- **Arancel de referencia desactualizado**: `ARANCEL_2022_COMENTADO.xlsx` y
+  la lista de identificadores (importaciones ene–jul 2025) no tienen las
+  aperturas NCM más nuevas (ej. 7306.30 hoy abre en 7306.30.10/7306.30.90;
+  la DNA rechaza 7306.30.00). Si el NCM del proveedor MERCOSUR no figura en
+  la referencia, NO "corregirlo" a la versión vieja: pedir el identificador
+  en KitApp y guardarlo con `guardar_identificador` (queda en
+  `data/identificadores_confirmados.json`, versionado).
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código
   residual "Los demás", siempre revisar con
   `parse_arancel.listar_subpartidas(partida)` todas las subpartidas

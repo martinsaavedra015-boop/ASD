@@ -52,11 +52,12 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 
 def generar_csv(filas, nombre_archivo, con_encabezado=False):
-    """CSV para carga: SIN fila de titulos por default (confirmado por el
-    usuario — el sistema de carga toma la primera fila como dato)."""
+    """CSV para carga: delimitado por COMAS y SIN fila de titulos
+    (confirmado por el usuario). Los campos con coma decimal (montos,
+    pesos) quedan entre comillas, como hace Excel en un CSV estandar."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
+        writer = csv.writer(f, delimiter=",", lineterminator="\r\n")
         if con_encabezado:
             writer.writerow(ENCABEZADOS)
         for fila in filas:

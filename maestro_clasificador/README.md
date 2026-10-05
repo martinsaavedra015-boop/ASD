@@ -106,8 +106,12 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   falta ese dato puntual (`identificador_ncm.mensaje_identificador_faltante`).
 - **Toy'N Gee Limited**: si el proveedor es este, la marca siempre es
   "TOY N GEE" (con la N), nunca la licencia/personaje del producto.
-- **Peso bruto/neto**: nunca se estima. Si la factura no lo trae, queda en
-  blanco y se flaguea en NOTAS para completar con packing list/B/L.
+- **Peso bruto/neto: NUNCA en blanco** (confirmado por el usuario). Orden de
+  fuentes: packing list / B/L > factura > estimación por ficha técnica o
+  cálculo (norma, catálogo, kg/m × largo). Si es estimado, se aclara en
+  NOTAS como ESTIMADO, con la base del cálculo, para reemplazar cuando
+  llegue el packing list. Cada línea lleva su `peso_bruto`/`peso_neto`
+  numérico y `procesar_factura` suma los pesos de todas las líneas del ítem.
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código
   residual "Los demás", siempre revisar con
   `parse_arancel.listar_subpartidas(partida)` todas las subpartidas

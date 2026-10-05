@@ -37,6 +37,19 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     }
 
 
+def _sumar_peso(grupo, campo):
+    """Peso del item = suma de los pesos de todas sus lineas (antes solo se
+    tomaba la primera linea del grupo). Acepta numeros o texto con coma
+    decimal. Devuelve texto con coma decimal, o "" si falta en alguna linea."""
+    total = 0.0
+    for linea in grupo:
+        v = linea.get(campo)
+        if v in (None, ""):
+            return ""
+        total += float(str(v).replace(",", ".")) if isinstance(v, str) else float(v)
+    return formato_decimal(total)
+
+
 def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre="ML"):
     """lineas: lista de dicts ya clasificados, cada uno con:
     codigo_ncm, descripcion_factura, cantidad, unidad_texto_factura, fob,
@@ -56,8 +69,8 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         pais_origen = grupo[0]["pais_origen"]
         pais_procedencia = grupo[0].get("pais_procedencia", pais_origen)
         nombre_marca = grupo[0]["nombre_marca"]
-        peso_bruto = grupo[0].get("peso_bruto")
-        peso_neto = grupo[0].get("peso_neto")
+        peso_bruto = _sumar_peso(grupo, "peso_bruto")
+        peso_neto = _sumar_peso(grupo, "peso_neto")
 
         if len(grupo) == 1:
             linea = grupo[0]
@@ -88,9 +101,10 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
                 f"con {len(grupo)} subitems (mismo NCM)."
             )
 
-        if not peso_bruto and not peso_neto:
+        if not peso_bruto or not peso_neto:
             notas.append(
-                f"Partida {codigo_ncm}: peso bruto/neto en blanco, completar con packing list o B/L."
+                f"FALTA PESO en partida {codigo_ncm}: el peso nunca puede quedar en blanco. "
+                f"Tomarlo del packing list/B/L o estimarlo por ficha tecnica antes de entregar."
             )
 
     return filas, notas

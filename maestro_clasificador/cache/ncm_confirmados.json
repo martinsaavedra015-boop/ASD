@@ -115,7 +115,7 @@
   },
   "kids2 16885 shake-a-shape zen, sonajero/mordedor": {
     "descripcion_original": "kids2 16885 Shake-a-Shape Zen, sonajero/mordedor",
-    "ncm_completo": "9503.00.99",
+    "ncm_completo": "3924.90.00",
     "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 16885 (BABY EINSTEIN) identificado en kids2.com",
     "fecha": "2026-10-06"
   },
@@ -193,7 +193,7 @@
   },
   "kids2 17488 take along opus soother, pulpo blando musical (no es chupete)": {
     "descripcion_original": "kids2 17488 Take Along Opus Soother, pulpo blando musical (NO es chupete)",
-    "ncm_completo": "9503.00.31",
+    "ncm_completo": "3924.90.00",
     "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 17488 (BABY EINSTEIN) identificado en kids2.com",
     "fecha": "2026-10-06"
   },
@@ -205,7 +205,7 @@
   },
   "kids2 17614 farm explorers teether book, libro blando": {
     "descripcion_original": "kids2 17614 Farm Explorers Teether Book, libro blando",
-    "ncm_completo": "9503.00.99",
+    "ncm_completo": "3924.90.00",
     "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 17614 (BABY EINSTEIN) identificado en kids2.com",
     "fecha": "2026-10-06"
   },
@@ -549,6 +549,30 @@
     "descripcion_original": "kids2 17882 Roll-Along Rainforest, set rodillo inflable + 3 pelotas (NO piscina)",
     "ncm_completo": "9503.00.80",
     "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 17882 (BRIGHT STARTS) identificado en kids2.com",
+    "fecha": "2026-10-06"
+  },
+  "kids2 12825 disney baby minnie tiny trek 2-in-1 walker, andador (60% plastico)": {
+    "descripcion_original": "kids2 12825 Disney Baby Minnie Tiny Trek 2-in-1 Walker, andador (60% plastico)",
+    "ncm_completo": "9403.70.00",
+    "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 12825 (BRIGHT STARTS) identificado en kids2.com",
+    "fecha": "2026-10-06"
+  },
+  "kids2 17151 smooth strides activity walker, andador (60% plastico)": {
+    "descripcion_original": "kids2 17151 Smooth Strides Activity Walker, andador (60% plastico)",
+    "ncm_completo": "9403.70.00",
+    "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 17151 (INGENUITY) identificado en kids2.com",
+    "fecha": "2026-10-06"
+  },
+  "kids2 17272 the doorway 42w gate, puerta de seguridad a presion (85% plastico 15% acero)": {
+    "descripcion_original": "kids2 17272 The Doorway 42W Gate, puerta de seguridad a presion (85% plastico 15% acero)",
+    "ncm_completo": "3924.90.00",
+    "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 17272 (INGENUITY) identificado en kids2.com",
+    "fecha": "2026-10-06"
+  },
+  "kids2 17615 probable baby einstein explorers teether book (2do diseno de 17614), libro blando de tela; codigo no publicado": {
+    "descripcion_original": "kids2 17615 Probable Baby Einstein Explorers Teether Book (2do diseno de 17614), libro blando de tela; codigo no publicado",
+    "ncm_completo": "3924.90.00",
+    "dato_que_completo": "Factura Vertigo ZL 62939; SKU Kids2 17615 (BABY EINSTEIN) identificado en kids2.com",
     "fecha": "2026-10-06"
   }
 }

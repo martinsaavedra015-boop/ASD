@@ -124,6 +124,15 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Memoria versionada**: `cache/ncm_confirmados.json` y
   `cache/identificadores_aprendidos.json` se commitean (el resto de
   `cache/` no) para que lo aprendido no se pierda entre sesiones.
+- **Criterios de clasificación confirmados por el usuario** (artículos para
+  bebé, factura Vertigo ZL 62939 / Kids2; prevalecen sobre precedentes de
+  otras aduanas):
+  - Andaderas/andadores (todas): **9403.70.00** (muebles de plástico).
+  - Mantas y arrullos (SwaddleMe, muselina o punto, incluso "pañal
+    convertible"): **6301.30.00** (mantas de algodón).
+  - Mordedores (plástico, refrigerantes, libros mordedores de tela,
+    "chupete multisensorial") y puertas de seguridad a presión:
+    **3924.90.00**.
 - **Toy'N Gee Limited**: si el proveedor es este, la marca siempre es
   "TOY N GEE" (con la N), nunca la licencia/personaje del producto.
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código

@@ -85,9 +85,7 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 
 - **Tasa de referencia: siempre ANV**, nunca AEC (AEC es solo dato de
   contexto).
-- **Decimales con coma**, no punto (`23730,00`, formato paraguayo) — el CSV
-  usa `;` como delimitador precisamente para poder llevar comas dentro de
-  los campos sin romper la estructura.
+- **Decimales con coma**, no punto (`23730,00`, formato paraguayo).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,
@@ -99,9 +97,16 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   aparte de la clasificación. Si la partida está firme pero no hay
   identificador en la referencia, no es un problema de clasificación — solo
   falta ese dato puntual (`identificador_ncm.mensaje_identificador_faltante`).
-- **Entrega: siempre XLSX + CSV**. El CSV
-  (`generar_salida.generar_csv`) es para subir directo a KittApp y va
-  **SIN fila de títulos/encabezados**: arranca directo con el primer ítem.
+- **Entrega: siempre XLSX + CSV**. El CSV (`generar_salida.generar_csv`)
+  se sube directo a KitApp y es igual a `ejemplos/CSV_REFERENCIA_DNA.csv`
+  (CSV real aceptado): formato Excel "CSV (delimitado por comas)" con
+  configuración paraguaya, o sea separador `;` y coma decimal, **SIN fila
+  de títulos** (arranca directo con el primer ítem), **sin comillas** (el
+  cierre va `EN 23200 UNIDAD DETALLADO EN SUBITEM`), enteros sin decimales,
+  15 columnas, ANSI sin BOM, CRLF.
+- **Peso bruto/neto: NUNCA en blanco** (confirmado por el usuario). Fuente:
+  packing list / B/L > factura > estimación. Si es estimado, aclararlo en
+  NOTAS como ESTIMADO, con la base del cálculo.
 - **Nunca entregar un título como posición**: la columna B tiene que ser
   siempre un código seleccionable del sistema (11 dígitos + letra). Si
   `resolver_codigo_final` no encuentra identificador, revisar si el sistema
@@ -116,8 +121,6 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   `cache/` no) para que lo aprendido no se pierda entre sesiones.
 - **Toy'N Gee Limited**: si el proveedor es este, la marca siempre es
   "TOY N GEE" (con la N), nunca la licencia/personaje del producto.
-- **Peso bruto/neto**: nunca se estima. Si la factura no lo trae, queda en
-  blanco y se flaguea en NOTAS para completar con packing list/B/L.
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código
   residual "Los demás", siempre revisar con
   `parse_arancel.listar_subpartidas(partida)` todas las subpartidas

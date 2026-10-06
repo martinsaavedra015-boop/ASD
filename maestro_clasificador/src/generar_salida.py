@@ -1,7 +1,7 @@
 """Genera el archivo final XLSX (hojas ORDEN + NOTAS) y CSV a partir de las
 filas ya armadas por procesar_factura.py / orden_builder.py."""
 import os
-import csv
+import re
 import openpyxl
 from openpyxl.styles import Font, Alignment
 from config import OUTPUT_DIR
@@ -51,12 +51,39 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     return ruta_salida
 
 
+_NUMERO_COMA_RE = re.compile(r"^\d+,\d+$")
+
+
+def _numero_estilo_excel(v):
+    """'3166,40' -> '3166,4' ; '720,00' -> '720' (como guarda Excel en
+    formato General, igual que el CSV de referencia aceptado por la DNA)."""
+    entero, dec = v.split(",")
+    dec = dec.rstrip("0")
+    return f"{entero},{dec}" if dec else entero
+
+
+def _campo_csv_dna(valor):
+    """Sin comillas de ningun tipo (el cierre del item va 'EN 23200 UNIDAD
+    DETALLADO EN SUBITEM'), espacios simples, numeros estilo Excel."""
+    v = "" if valor is None else str(valor)
+    if _NUMERO_COMA_RE.match(v):
+        v = _numero_estilo_excel(v)
+    v = v.replace('"', "")
+    v = re.sub(r"\s+", " ", v).strip()
+    if ";" in v:
+        raise ValueError(f"Campo con ';', rompe el CSV de la DNA: {v!r}")
+    return v
+
+
 def generar_csv(filas, nombre_archivo):
-    """CSV para subir directo a KittApp: SIN fila de titulos/encabezados
-    (confirmado por el usuario) — arranca directo con el primer item."""
+    """CSV para subir directo a KitApp (DNA > Gestionar Item Provisorio),
+    identico a ejemplos/CSV_REFERENCIA_DNA.csv (CSV real aceptado): el
+    formato Excel "CSV (delimitado por comas)" con configuracion regional
+    paraguaya -> separador ';', coma decimal, SIN fila de titulos (arranca
+    directo con el primer item), sin comillas, 15 columnas, ANSI sin BOM,
+    CRLF."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+    lineas = [";".join(_campo_csv_dna(fila[c]) for c in COL_ORDEN) for fila in filas]
+    with open(ruta_salida, "w", newline="", encoding="cp1252", errors="replace") as f:
+        f.write("\r\n".join(lineas) + "\r\n")
     return ruta_salida

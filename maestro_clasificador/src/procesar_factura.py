@@ -1,7 +1,7 @@
 """Agrupa lineas de factura por NCM en items+subitems (punto 46 del
 instructivo maestro) y arma las filas finales listas para el ORDEN."""
 from collections import OrderedDict
-from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
+from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm, UNIDADES
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
@@ -55,7 +55,12 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
     filas, notas = [], []
 
     for codigo_ncm, grupo in grupos.items():
-        unidad_codigo, unidad_texto = mapear_unidad(grupo[0]["unidad_texto_factura"])
+        if grupo[0].get("unidad_codigo"):
+            # Unidad forzada (ej. "64" PIEZAS cuando el despacho/VUI la usa asi)
+            unidad_codigo = grupo[0]["unidad_codigo"]
+            unidad_texto = UNIDADES[unidad_codigo]
+        else:
+            unidad_codigo, unidad_texto = mapear_unidad(grupo[0]["unidad_texto_factura"])
         pais_origen = grupo[0]["pais_origen"]
         pais_procedencia = grupo[0].get("pais_procedencia", pais_origen)
         nombre_marca = grupo[0]["nombre_marca"]

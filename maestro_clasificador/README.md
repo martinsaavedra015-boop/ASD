@@ -131,8 +131,9 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   - Mantas y arrullos (SwaddleMe, muselina o punto, incluso "pañal
     convertible"): **6301.30.00** (mantas de algodón).
   - Mordedores (plástico, refrigerantes, libros mordedores de tela,
-    "chupete multisensorial") y puertas de seguridad a presión:
-    **3924.90.00**.
+    "chupete multisensorial"): **3924.90.00**.
+  - Puertas de seguridad para bebé: **3926.90.90** (las demás manufacturas
+    de plástico).
 - **Toy'N Gee Limited**: si el proveedor es este, la marca siempre es
   "TOY N GEE" (con la N), nunca la licencia/personaje del producto.
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código

@@ -99,6 +99,18 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   aparte de la clasificación. Si la partida está firme pero no hay
   identificador en la referencia, no es un problema de clasificación — solo
   falta ese dato puntual (`identificador_ncm.mensaje_identificador_faltante`).
+- **Nunca entregar un título como posición**: la columna B tiene que ser
+  siempre un código seleccionable del sistema (11 dígitos + letra). Si
+  `resolver_codigo_final` no encuentra identificador, revisar si el sistema
+  de aduana abre esa subpartida en más ítems de los que trae el
+  `ARANCEL_2022` local (caso real: `9403.20.00` es título; el sistema abre
+  `9403.20.10.000Y` cocinas / `9403.20.90.000B` los demás). En ese caso
+  clasificar en la apertura correcta, pasar `descripcion_arancel` en la
+  línea (texto de 8+ dígitos que no está en el Arancel local) y guardar el
+  código con `guardar_identificador`.
+- **Memoria versionada**: `cache/ncm_confirmados.json` y
+  `cache/identificadores_aprendidos.json` se commitean (el resto de
+  `cache/` no) para que lo aprendido no se pierda entre sesiones.
 - **Toy'N Gee Limited**: si el proveedor es este, la marca siempre es
   "TOY N GEE" (con la N), nunca la licencia/personaje del producto.
 - **Peso bruto/neto**: nunca se estima. Si la factura no lo trae, queda en

@@ -1,5 +1,9 @@
 __pycache__/
 *.pyc
 cache/*.json
+# Memoria aprendida (NCMs confirmados e identificadores de aduana): se
+# versiona para no perderla entre sesiones (el contenedor es efimero).
+!cache/ncm_confirmados.json
+!cache/identificadores_aprendidos.json
 salidas/*
 !salidas/.gitkeep

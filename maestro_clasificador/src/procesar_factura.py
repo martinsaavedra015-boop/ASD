@@ -8,8 +8,10 @@ COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
-                nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
-    desc_oficial = descripcion_oficial(codigo_ncm)
+                nombre_marca, peso_bruto, peso_neto, descripcion_cierre, descripcion_arancel=None):
+    # descripcion_arancel: texto oficial a 8+ digitos cuando la apertura no
+    # existe en el Arancel local (ej. 9403.20.90, que el ARANCEL_2022 no trae)
+    desc_oficial = limpiar_texto(descripcion_arancel) if descripcion_arancel else descripcion_oficial(codigo_ncm)
     columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
     return {
@@ -41,7 +43,8 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
     """lineas: lista de dicts ya clasificados, cada uno con:
     codigo_ncm, descripcion_factura, cantidad, unidad_texto_factura, fob,
     pais_origen, pais_procedencia (opcional), nombre_marca, peso_bruto
-    (opcional), peso_neto (opcional).
+    (opcional), peso_neto (opcional), descripcion_arancel (opcional: texto
+    oficial a 8+ digitos si la apertura no esta en el Arancel local).
 
     Devuelve: (filas [lista de dicts columna->valor], notas [lista de str])
     """
@@ -58,6 +61,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         nombre_marca = grupo[0]["nombre_marca"]
         peso_bruto = grupo[0].get("peso_bruto")
         peso_neto = grupo[0].get("peso_neto")
+        descripcion_arancel = grupo[0].get("descripcion_arancel")
 
         if len(grupo) == 1:
             linea = grupo[0]
@@ -66,7 +70,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
             filas.append(_fila_item(
                 codigo_ncm, linea["cantidad"], linea["fob"], unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
-                nombre_marca, peso_bruto, peso_neto, cierre,
+                nombre_marca, peso_bruto, peso_neto, cierre, descripcion_arancel,
             ))
         else:
             cantidad_total = sum(l["cantidad"] for l in grupo)
@@ -76,7 +80,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
             filas.append(_fila_item(
                 codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
-                nombre_marca, peso_bruto, peso_neto, cierre,
+                nombre_marca, peso_bruto, peso_neto, cierre, descripcion_arancel,
             ))
             for linea in grupo:
                 filas.append(_fila_subitem(

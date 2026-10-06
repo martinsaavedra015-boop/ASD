@@ -99,6 +99,9 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   aparte de la clasificación. Si la partida está firme pero no hay
   identificador en la referencia, no es un problema de clasificación — solo
   falta ese dato puntual (`identificador_ncm.mensaje_identificador_faltante`).
+- **Entrega: siempre XLSX + CSV**. El CSV
+  (`generar_salida.generar_csv`) es para subir directo a KittApp y va
+  **SIN fila de títulos/encabezados**: arranca directo con el primer ítem.
 - **Nunca entregar un título como posición**: la columna B tiene que ser
   siempre un código seleccionable del sistema (11 dígitos + letra). Si
   `resolver_codigo_final` no encuentra identificador, revisar si el sistema

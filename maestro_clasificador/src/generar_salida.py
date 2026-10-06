@@ -52,10 +52,11 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 
 def generar_csv(filas, nombre_archivo):
+    """CSV para subir directo a KittApp: SIN fila de titulos/encabezados
+    (confirmado por el usuario) — arranca directo con el primer item."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        writer.writerow(ENCABEZADOS)
         for fila in filas:
             writer.writerow([fila[c] for c in COL_ORDEN])
     return ruta_salida

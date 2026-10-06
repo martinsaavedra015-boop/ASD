@@ -104,6 +104,11 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   de títulos** (arranca directo con el primer ítem), **sin comillas** (el
   cierre va `EN 23200 UNIDAD DETALLADO EN SUBITEM`), enteros sin decimales,
   15 columnas, ANSI sin BOM, CRLF.
+- **Número de referencia del proveedor en cada línea** (pedido por el
+  usuario, prevalece sobre la aclaración 3 del instructivo): la descripción
+  de cada subítem, y la del ítem cuando va sin subítems, arranca con la
+  referencia de la factura (ej. `10042 JUGUETE P/BEBE`). Pasarlo en
+  `descripcion_factura` como `f"{ref} {descripcion}"`.
 - **Peso bruto/neto: NUNCA en blanco** (confirmado por el usuario). Fuente:
   packing list / B/L > factura > estimación. Si es estimado, aclararlo en
   NOTAS como ESTIMADO, con la base del cálculo.

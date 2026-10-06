@@ -85,6 +85,12 @@ def resolver_codigo_final(codigo_ncm_8digitos):
     if clave in aprendidos:
         return aprendidos[clave], True
 
+    # Si viene una apertura de 10+ digitos (ej. 9018.39.29.100) se compara
+    # completa: no se puede resolver con el identificador de otra apertura
+    # de la misma subpartida (ej. 9018.39.29.900J).
+    if len(clave) > 8:
+        matches = [c for c in _codigos_identificador if _solo_digitos(c) == clave]
+        return (matches[0], True) if len(matches) == 1 else (codigo_ncm_8digitos, False)
     ocho = clave[:8]
     matches = [c for c in _codigos_identificador if _solo_digitos(c)[:8] == ocho]
     if not matches:

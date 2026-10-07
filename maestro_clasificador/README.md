@@ -88,6 +88,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Decimales con coma**, no punto (`23730,00`, formato paraguayo) — el CSV
   usa `;` como delimitador precisamente para poder llevar comas dentro de
   los campos sin romper la estructura.
+- **CSV sin títulos**: el CSV nunca lleva fila de encabezados — arranca
+  directo con la primera fila del ORDEN (el XLSX sí los lleva).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

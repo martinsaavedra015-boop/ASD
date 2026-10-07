@@ -53,9 +53,10 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 def generar_csv(filas, nombre_archivo):
     """CSV para carga directa: SIN fila de titulos/encabezados (confirmado
-    por el usuario) — arranca directo con la primera fila del ORDEN."""
+    por el usuario) — arranca directo con la primera fila del ORDEN. Sin BOM: el sistema de
+    aduana lee el BOM pegado a la "N" y rechaza con "TIPO DE ITEM INVALIDO"."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
+    with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
         for fila in filas:
             writer.writerow([fila[c] for c in COL_ORDEN])

@@ -90,6 +90,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   los campos sin romper la estructura.
 - **CSV sin títulos**: el CSV nunca lleva fila de encabezados — arranca
   directo con la primera fila del ORDEN (el XLSX sí los lleva).
+- **Mismo NCM = un solo ítem**, aunque el Certificado de Origen traiga
+  varias órdenes/DJO para ese NCM — no se separa por orden del C.O.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

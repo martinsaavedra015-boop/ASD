@@ -1,7 +1,6 @@
 """Genera el archivo final XLSX (hojas ORDEN + NOTAS) y CSV a partir de las
 filas ya armadas por procesar_factura.py / orden_builder.py."""
 import os
-import csv
 import openpyxl
 from openpyxl.styles import Font, Alignment
 from config import OUTPUT_DIR
@@ -51,13 +50,22 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     return ruta_salida
 
 
+def _valor_csv(valor):
+    """Sin comillas y sin ';' (el delimitador) dentro del campo."""
+    texto = "" if valor is None else str(valor)
+    texto = texto.replace('"', "").replace(";", " ")
+    return " ".join(texto.split())
+
+
 def generar_csv(filas, nombre_archivo):
     """CSV para carga directa: SIN fila de titulos/encabezados (confirmado
     por el usuario) — arranca directo con la primera fila del ORDEN. Sin BOM: el sistema de
-    aduana lee el BOM pegado a la "N" y rechaza con "TIPO DE ITEM INVALIDO"."""
+    aduana lee el BOM pegado a la "N" y rechaza con "TIPO DE ITEM INVALIDO".
+    SIN comillas en ningun campo (confirmado por el usuario): ni las de escape
+    del csv ni las de EN "X" "UNIDAD", que en el CSV va como EN X UNIDAD. El
+    XLSX si conserva las comillas del punto 10 del instructivo."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
         for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+            f.write(";".join(_valor_csv(fila[c]) for c in COL_ORDEN) + "\r\n")
     return ruta_salida

@@ -89,7 +89,10 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   usa `;` como delimitador precisamente para poder llevar comas dentro de
   los campos sin romper la estructura.
 - **CSV sin títulos**: el CSV nunca lleva fila de encabezados — arranca
-  directo con la primera fila del ORDEN (el XLSX sí los lleva).
+  directo con la primera fila del ORDEN (el XLSX sí los lleva). Sin BOM.
+- **CSV sin comillas**: ningún campo lleva comillas. El cierre de la
+  descripción del ítem va `EN 147 UNIDAD DETALLADO EN SUBITEM` (sin las
+  comillas del ejemplo del instructivo). Tampoco `;` dentro de un campo.
 - **Mismo NCM = un solo ítem**, aunque el Certificado de Origen traiga
   varias órdenes/DJO para ese NCM — no se separa por orden del C.O.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".

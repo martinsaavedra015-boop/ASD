@@ -54,10 +54,15 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 def generar_csv(filas, nombre_archivo):
     """CSV para carga directa: SIN fila de titulos/encabezados (confirmado
     por el usuario) — arranca directo con la primera fila del ORDEN. Sin BOM: el sistema de
-    aduana lee el BOM pegado a la "N" y rechaza con "TIPO DE ITEM INVALIDO"."""
+    aduana lee el BOM pegado a la "N" y rechaza con "TIPO DE ITEM INVALIDO".
+    Sin comillas en ningun campo (confirmado por el usuario)."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
         for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+            valores = [str(fila[c]) for c in COL_ORDEN]
+            malos = [v for v in valores if '"' in v or ";" in v]
+            if malos:
+                raise ValueError(f"El CSV no puede llevar comillas ni punto y coma en los campos: {malos}")
+            writer.writerow(valores)
     return ruta_salida

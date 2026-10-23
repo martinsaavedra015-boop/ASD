@@ -90,6 +90,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   los campos sin romper la estructura.
 - **CSV sin títulos**: el CSV nunca lleva fila de encabezados — arranca
   directo con la primera fila del ORDEN (el XLSX sí los lleva). Sin BOM.
+- **Descripción máx. 200 caracteres**: el sistema (columna LARTMERCAD) rechaza
+  más de 200. Se recorta en palabra completa conservando el EAN/UPC final.
 - **CSV sin comillas**: ningún campo lleva comillas. El cierre de la
   descripción del ítem va `EN 147 UNIDAD DETALLADO EN SUBITEM` (sin las
   comillas del ejemplo del instructivo). Tampoco `;` dentro de un campo.

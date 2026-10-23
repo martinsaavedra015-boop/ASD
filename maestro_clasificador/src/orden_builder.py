@@ -21,6 +21,26 @@ def limpiar_texto(texto):
     return t
 
 
+MAX_DESCRIPCION = 200  # limite de la columna LARTMERCAD del sistema de aduana (ORA-12899)
+
+
+def acortar_descripcion(texto, maximo=MAX_DESCRIPCION):
+    """Recorta la descripcion a `maximo` caracteres cortando en palabra
+    completa. Si termina en un codigo numerico largo (EAN/UPC) lo conserva
+    al final."""
+    if len(texto) <= maximo:
+        return texto
+    palabras = texto.split()
+    cola = palabras.pop() if palabras and palabras[-1].isdigit() and len(palabras[-1]) >= 8 else ""
+    limite = maximo - (len(cola) + 1 if cola else 0)
+    cuerpo = ""
+    for w in palabras:
+        if len(cuerpo) + len(w) + (1 if cuerpo else 0) > limite:
+            break
+        cuerpo = f"{cuerpo} {w}" if cuerpo else w
+    return f"{cuerpo} {cola}".strip()
+
+
 def formato_decimal(numero):
     """Monto con 2 decimales y coma como separador decimal (formato
     paraguayo). Ej: 23730.00 -> '23730,00'"""

@@ -1,7 +1,7 @@
 """Agrupa lineas de factura por NCM en items+subitems (punto 46 del
 instructivo maestro) y arma las filas finales listas para el ORDEN."""
 from collections import OrderedDict
-from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
+from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm, acortar_descripcion
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
@@ -10,7 +10,7 @@ def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_text
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
     desc_oficial = descripcion_oficial(codigo_ncm)
-    columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
+    columna_d = acortar_descripcion(f'{desc_oficial} {descripcion_cierre}'.strip())
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,
@@ -25,7 +25,7 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     instructivo): A=cantidad subitem, B=FOB subitem, C=marca libre,
     D=nombre marca, E=descripcion (verbatim factura), F=cantidad
     estadistica subitem."""
-    desc_limpia = limpiar_texto(descripcion)
+    desc_limpia = acortar_descripcion(limpiar_texto(descripcion))
     return {
         "A": str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad),
         "B": formato_decimal(fob),

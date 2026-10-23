@@ -64,5 +64,8 @@ def generar_csv(filas, nombre_archivo):
             malos = [v for v in valores if '"' in v or ";" in v]
             if malos:
                 raise ValueError(f"El CSV no puede llevar comillas ni punto y coma en los campos: {malos}")
+            largos = [v for v in valores if len(v) > 200]
+            if largos:
+                raise ValueError(f"Campo de mas de 200 caracteres (limite del sistema de aduana): {largos}")
             writer.writerow(valores)
     return ruta_salida

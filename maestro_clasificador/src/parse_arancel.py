@@ -58,7 +58,8 @@ def _parsear_arancel():
                 aec = row[2] if len(row) > 2 else None
                 anv = row[3] if len(row) > 3 else None
                 omc = row[4] if len(row) > 4 else None
-                if ultimo_codigo is not None and (aec is not None or anv is not None or omc is not None):
+                continua = ultimo_codigo is not None and text[:1].islower() and not records[ultimo_codigo]["descripcion"].rstrip().endswith((".", ":"))
+                if ultimo_codigo is not None and (aec is not None or anv is not None or omc is not None or continua):
                     rec = records[ultimo_codigo]
                     rec["descripcion"] = f'{rec["descripcion"]} {text}'.strip()
                     if aec is not None:

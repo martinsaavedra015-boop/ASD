@@ -20,6 +20,7 @@ def _parsear_arancel():
     cur_capitulo = None
     notas_buffer = []
     ultimo_codigo = None
+    ultimo_fue_nota = False
 
     rows = list(ws.iter_rows(min_row=1, values_only=True))
     i = 0
@@ -55,10 +56,9 @@ def _parsear_arancel():
                 # renglones) si trae datos de AEC/ANV/OMC, o si el
                 # anterior directamente no tenia descripcion todavia.
                 # Ambos casos son la misma partida, no una nota aparte.
-                aec = row[2] if len(row) > 2 else None
-                anv = row[3] if len(row) > 3 else None
-                omc = row[4] if len(row) > 4 else None
-                continua = ultimo_codigo is not None and text[:1].islower() and not records[ultimo_codigo]["descripcion"].rstrip().endswith((".", ":"))
+                # Celdas de tasa vacias ("") cuentan como sin dato.
+                aec, anv, omc = (row[c] if len(row) > c and not (row[c] is None or str(row[c]).strip() == "") else None for c in (2, 3, 4))
+                continua = ultimo_codigo is not None and not ultimo_fue_nota and text[:1].islower() and not records[ultimo_codigo]["descripcion"].rstrip().endswith((".", ":"))
                 if ultimo_codigo is not None and (aec is not None or anv is not None or omc is not None or continua):
                     rec = records[ultimo_codigo]
                     rec["descripcion"] = f'{rec["descripcion"]} {text}'.strip()
@@ -68,12 +68,27 @@ def _parsear_arancel():
                         rec["anv"] = anv
                     if omc is not None:
                         rec["omc"] = omc
+                elif ultimo_fue_nota and not text.startswith("-") and notas_buffer:
+                    # Segundo renglon de un encabezado sin codigo (ej. "- Asientos
+                    # transformables en cama, excepto el material de" / "acampar o
+                    # de jardin:"): pertenece al encabezado, no al NCM anterior.
+                    notas_buffer[-1] = f"{notas_buffer[-1]} {text}"
                 else:
                     notas_buffer.append(text)
+                    # Solo un encabezado de guiones ("- Asientos ...") abre un
+                    # bloque propio; otra fila suelta no corta la continuacion.
+                    ultimo_fue_nota = text.startswith("-")
             i += 1
             continue
         if col_a is not None:
             codigo = str(col_a).strip()
+            ultimo_fue_nota = False
+            if codigo in records and re.match(r"^\d{4}\.\d", codigo):
+                # Codigo repetido en el Excel fuente (errata, ej. 9401.41.00 "Los
+                # demas" que en realidad es 9401.49.00): se conserva el primero.
+                ultimo_codigo = None
+                i += 1
+                continue
             desc = str(col_b).strip() if col_b else ""
             aec = row[2] if len(row) > 2 else None
             anv = row[3] if len(row) > 3 else None

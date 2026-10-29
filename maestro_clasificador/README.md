@@ -99,6 +99,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   varias órdenes/DJO para ese NCM — no se separa por orden del C.O.
 - **JCDecaux (JCDECAUX PARAGUAY S.A.)**: país de origen = el de cada línea
   de factura; país de procedencia **siempre 001 Francia**. Marca JCDECAUX.
+- **Acuerdo Israel-MERCOSUR**: con C.O. del TLC Israel-MERCOSUR el campo
+  ACUERDO va `MERCOISRAEL` (confirmado por el usuario).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

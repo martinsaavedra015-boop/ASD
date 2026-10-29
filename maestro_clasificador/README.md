@@ -100,7 +100,7 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **JCDecaux (JCDECAUX PARAGUAY S.A.)**: país de origen = el de cada línea
   de factura; país de procedencia **siempre 001 Francia**. Marca JCDECAUX.
 - **Acuerdo Israel-MERCOSUR**: con C.O. del TLC Israel-MERCOSUR el campo
-  ACUERDO va `MERCOISRAEL` (confirmado por el usuario).
+  ACUERDO va `MERCOSURISRAEL` (TLC MERCOSUR ISRAEL Ley 3857/10, codigo de SOFIA).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

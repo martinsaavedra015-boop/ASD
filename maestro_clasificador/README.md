@@ -101,6 +101,10 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   de factura; país de procedencia **siempre 001 Francia**. Marca JCDECAUX.
 - **Acuerdo Israel-MERCOSUR**: con C.O. del TLC Israel-MERCOSUR el campo
   ACUERDO va `MERCOSURISRAEL` (TLC MERCOSUR ISRAEL Ley 3857/10, codigo de SOFIA).
+- **Ballerina (NILCOS)**: unidad declarada CAJAS (16) con cantidad = cajas;
+  la **cantidad estadistica** (item y subitem) va en **unidades** (frascos =
+  cajas x unidades por caja, de la lista de empaque). Campo opcional
+  `cantidad_estadistica` en cada linea de `procesar_factura`.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

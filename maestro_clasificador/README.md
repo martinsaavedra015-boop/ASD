@@ -105,6 +105,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   la **cantidad estadistica** (item y subitem) va en **unidades** (frascos =
   cajas x unidades por caja, de la lista de empaque). Campo opcional
   `cantidad_estadistica` en cada linea de `procesar_factura`.
+  Subitems Ballerina: **solo la descripcion**, sin el codigo de producto
+  (ej. "BALLERINA NATURAL SHAMPOO ..."; criterio usuario 03/11/2026).
   Seguro Ballerina: **0,21% del FOB** (criterio usuario; ej. EXP 269/26
   USD 59,58 sobre FOB 28.374,65).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".

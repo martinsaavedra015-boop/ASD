@@ -103,7 +103,9 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   ACUERDO va `MERCOSURISRAEL` (TLC MERCOSUR ISRAEL Ley 3857/10, codigo de SOFIA).
 - **Ballerina (NILCOS)**: unidad declarada CAJAS (16) con cantidad = cajas;
   la **cantidad estadistica** (item y subitem) va en **unidades** (frascos =
-  cajas x unidades por caja, de la lista de empaque). Campo opcional
+  cajas x unidades por caja, de la lista de empaque) cuando SOFIA pide
+  unidad estadistica UNIDAD (3305.10 / 3305.90). Para 3401.30 (jabon
+  liquido) la unidad estadistica es KILOGRAMO: va el peso neto. Campo opcional
   `cantidad_estadistica` en cada linea de `procesar_factura`.
   Subitems Ballerina: **solo la descripcion**, sin el codigo de producto
   (ej. "BALLERINA NATURAL SHAMPOO ..."; criterio usuario 03/11/2026).

@@ -111,6 +111,10 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   (ej. "BALLERINA NATURAL SHAMPOO ..."; criterio usuario 03/11/2026).
   Seguro Ballerina: **0,21% del FOB** (criterio usuario; ej. EXP 269/26
   USD 59,58 sobre FOB 28.374,65).
+- **Codigos de pais** fuera de CODIGO_DE_PAISES.xlsx: siguen la nomenclatura
+  de paises de Eurostat. Confirmados por el usuario: Turquia 052, Rumania 066,
+  Taiwan 736, Uruguay 524. Por la misma tabla: Tailandia 680, Vietnam 690
+  (Camboya 696 y China 720 si estan en el Excel).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

@@ -117,6 +117,8 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   (Camboya 696 y China 720 si estan en el Excel).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
+- **Sin marca en factura**: el NOMBRE DE MARCA es el **proveedor** (ej. FOSTER),
+  nunca "SIN MARCA" (criterio usuario).
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,
   no PIEZAS (64). PIEZAS solo con justificación explícita puntual.
 - **Descripción del ítem**: arranca desde el nivel de 8 dígitos del

@@ -10,6 +10,14 @@ están en `maestro_clasificador/`. **Antes de hacer cualquier otra cosa, leer
 uso paso a paso y las reglas de negocio ya confirmadas (no volver a
 preguntarlas).
 
+## Correcciones del usuario (NO repetir errores)
+
+- CSV para aduana: **sin fila de encabezado y sin BOM**.
+- Peso bruto/neto: **estimar** por item prorrateando los totales de la
+  factura (ver README). No dejar en blanco.
+- Si llegan facturas comerciales, mandan sobre el despacho provisorio
+  (origen por linea, incoterm, fecha).
+
 ## Regla clave de esta sesión
 
 Si el usuario sube una **factura de exportación** (PDF), un **certificado de

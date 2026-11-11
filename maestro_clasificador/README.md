@@ -104,8 +104,17 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   falta ese dato puntual (`identificador_ncm.mensaje_identificador_faltante`).
 - **Toy'N Gee Limited**: si el proveedor es este, la marca siempre es
   "TOY N GEE" (con la N), nunca la licencia/personaje del producto.
-- **Peso bruto/neto**: nunca se estima. Si la factura no lo trae, queda en
-  blanco y se flaguea en NOTAS para completar con packing list/B/L.
+- **Peso bruto/neto (CORREGIDO por el usuario): SE ESTIMA por item.** Si
+  la factura/packing trae solo el total, prorratear ese total entre los
+  items usando un peso unitario tipico por tipo de producto (filtro, bomba,
+  disco de friccion, etc.), escalado para que la suma coincida exacto con
+  el total de cada factura. Si una factura no discrimina bruto/neto, usar
+  su total como bruto y estimar el neto con la relacion neto/bruto de la
+  otra factura de la operacion. Nunca dejar las columnas en blanco;
+  explicar el criterio en NOTAS.
+- **Pais de origen: manda la factura.** Si la factura indica origen por
+  linea, separar items por (NCM, pais de origen) aunque el despacho
+  provisorio los haya declarado juntos.
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código
   residual "Los demás", siempre revisar con
   `parse_arancel.listar_subpartidas(partida)` todas las subpartidas

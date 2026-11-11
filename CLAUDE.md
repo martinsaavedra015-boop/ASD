@@ -19,6 +19,10 @@ preguntarlas).
 - Si llegan facturas comerciales, mandan sobre el despacho provisorio
   (origen por linea, incoterm, fecha).
 
+- **Antes de entregar cualquier CSV**, correr
+  `python3 maestro_clasificador/src/validar_csv.py salidas/<archivo>.csv`
+  y revisar el archivo completo. No entregar si da errores.
+
 ## Regla clave de esta sesión
 
 Si el usuario sube una **factura de exportación** (PDF), un **certificado de

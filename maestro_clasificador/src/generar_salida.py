@@ -57,7 +57,7 @@ def generar_csv(filas, nombre_archivo):
     # ("﻿N") y rechaza el archivo con "TIPO DE ITEM INVALIDO".
     with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
-        writer.writerow(ENCABEZADOS)
+        # SIN fila de encabezado: el CSV arranca directo con el primer item.
         for fila in filas:
             writer.writerow([fila[c] for c in COL_ORDEN])
     return ruta_salida

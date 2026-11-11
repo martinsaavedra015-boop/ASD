@@ -56,8 +56,11 @@ def generar_csv(filas, nombre_archivo):
     # Sin BOM: el validador de aduana lee el BOM como parte del primer campo
     # (BOM + "N") y rechaza el archivo con "TIPO DE ITEM INVALIDO".
     with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
+        # SIN comillas: ningun campo se entrecomilla (QUOTE_NONE). Si un campo
+        # trae ";" o comillas se limpian antes de escribir.
+        writer = csv.writer(f, delimiter=";", lineterminator="\r\n",
+                            quoting=csv.QUOTE_NONE, escapechar=None)
         # SIN fila de encabezado: el CSV arranca directo con el primer item.
         for fila in filas:
-            writer.writerow([fila[c] for c in COL_ORDEN])
+            writer.writerow([str(fila[c]).replace('"', "").replace(";", " ") for c in COL_ORDEN])
     return ruta_salida

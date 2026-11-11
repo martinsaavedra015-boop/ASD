@@ -12,7 +12,8 @@ preguntarlas).
 
 ## Correcciones del usuario (NO repetir errores)
 
-- CSV para aduana: **sin fila de encabezado y sin BOM**.
+- CSV para aduana: **sin fila de encabezado, sin BOM y sin comillas**
+  (la descripcion va `... EN 16 UNIDAD DETALLADO EN SUBITEM`, sin ").
 - Peso bruto/neto: **estimar** por item prorrateando los totales de la
   factura (ver README). No dejar en blanco.
 - Si llegan facturas comerciales, mandan sobre el despacho provisorio

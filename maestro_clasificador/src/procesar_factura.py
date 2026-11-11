@@ -62,7 +62,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         if len(grupo) == 1:
             linea = grupo[0]
             cant_str = int(linea["cantidad"]) if unidad_texto == "UNIDAD" else linea["cantidad"]
-            cierre = f'EN "{cant_str}" "{unidad_texto}" {limpiar_texto(linea["descripcion_factura"])}'
+            cierre = f'EN {cant_str} {unidad_texto} {limpiar_texto(linea["descripcion_factura"])}'
             filas.append(_fila_item(
                 codigo_ncm, linea["cantidad"], linea["fob"], unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
@@ -72,7 +72,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
             cantidad_total = sum(l["cantidad"] for l in grupo)
             fob_total = sum(l["fob"] for l in grupo)
             cant_str = int(cantidad_total) if unidad_texto == "UNIDAD" else cantidad_total
-            cierre = f'EN "{cant_str}" "{unidad_texto}" DETALLADO EN SUBITEM'
+            cierre = f'EN {cant_str} {unidad_texto} DETALLADO EN SUBITEM'
             filas.append(_fila_item(
                 codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,

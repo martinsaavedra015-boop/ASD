@@ -53,7 +53,9 @@ def generar_orden_notas(filas, notas, nombre_archivo):
 
 def generar_csv(filas, nombre_archivo):
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
-    with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as f:
+    # Sin BOM: el validador de aduana lee el BOM como parte del primer campo
+    # ("﻿N") y rechaza el archivo con "TIPO DE ITEM INVALIDO".
+    with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";", lineterminator="\r\n")
         writer.writerow(ENCABEZADOS)
         for fila in filas:

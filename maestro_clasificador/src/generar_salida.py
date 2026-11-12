@@ -71,6 +71,8 @@ def _campo_csv_dna(valor):
         v = _numero_estilo_excel(v)
     v = v.replace('"', "")
     v = re.sub(r"\s+", " ", v).strip()
+    if len(v) > 200:
+        raise ValueError(f"Campo de {len(v)} caracteres, la DNA admite 200: {v!r}")
     if ";" in v:
         raise ValueError(f"Campo con ';', rompe el CSV de la DNA: {v!r}")
     return v

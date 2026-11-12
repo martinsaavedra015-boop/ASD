@@ -119,6 +119,9 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   la referencia, NO "corregirlo" a la versión vieja: pedir el identificador
   en KitApp y guardarlo con `guardar_identificador` (queda en
   `data/identificadores_confirmados.json`, versionado).
+- **Descripción máximo 200 caracteres** (KitApp: ORA-12899 en
+  KIT_ART.LARTMERCAD). Si texto del Arancel + cierre se pasa de 200, va
+  directo el ítem (`EN X UNIDAD` + descripción) sin el texto del Arancel.
 - **Planilla del usuario (cosméticos, etc.)**: si el usuario manda una
   planilla con columnas NCM / DESCRIPCION / R.S / VENCIMIENTO / NOMBRE /
   FABRICANTE / MARCA / UNID / P. TOTAL / P. NETO / P. BRUTO, esa planilla

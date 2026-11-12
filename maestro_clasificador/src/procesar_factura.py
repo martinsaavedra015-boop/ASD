@@ -4,6 +4,7 @@ from collections import OrderedDict
 from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
+MAX_DESC_DNA = 200  # largo maximo de la descripcion en KitApp (ORA-12899)
 
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
@@ -11,6 +12,10 @@ def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_text
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
     desc_oficial = descripcion_oficial(codigo_ncm)
     columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
+    if len(columna_d) > MAX_DESC_DNA:
+        # La DNA (KIT_ART.LARTMERCAD) admite 200 caracteres: si el texto del
+        # Arancel + cierre se pasa, va directo el item sin el texto del Arancel.
+        columna_d = descripcion_cierre.strip()
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,

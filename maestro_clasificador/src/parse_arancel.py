@@ -58,7 +58,17 @@ def _parsear_arancel():
                 aec = row[2] if len(row) > 2 else None
                 anv = row[3] if len(row) > 3 else None
                 omc = row[4] if len(row) > 4 else None
-                if ultimo_codigo is not None and (aec is not None or anv is not None or omc is not None):
+                # Tambien si el registro todavia no tiene tasas: la descripcion
+                # sigue en mas de dos renglones (ej. 3401.30.00 ocupa tres) y
+                # el renglon del medio no trae AEC/ANV.
+                # Solo para items de 8 digitos (siempre llevan tasas): en
+                # partidas de 4/6 digitos el renglon siguiente es el titulo
+                # de un grupo ("- Caballos:"), no una continuacion.
+                incompleto = (ultimo_codigo is not None
+                              and len(re.sub(r"\D", "", ultimo_codigo)) >= 8
+                              and records[ultimo_codigo].get("anv") is None
+                              and records[ultimo_codigo].get("aec") is None)
+                if ultimo_codigo is not None and (aec is not None or anv is not None or omc is not None or incompleto):
                     rec = records[ultimo_codigo]
                     rec["descripcion"] = f'{rec["descripcion"]} {text}'.strip()
                     if aec is not None:

@@ -1,5 +1,9 @@
 __pycache__/
 *.pyc
 cache/*.json
+# Lo aprendido (NCM e identificadores confirmados) se versiona: el
+# contenedor es efimero y si no se pierde entre sesiones.
+!cache/ncm_confirmados.json
+!cache/identificadores_aprendidos.json
 salidas/*
 !salidas/.gitkeep

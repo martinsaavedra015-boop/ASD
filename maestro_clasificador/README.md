@@ -129,6 +129,11 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   `data/unidad_estadistica_kg.json` (confirmados por el usuario, ej.
   3401.30.00) la CANTIDAD ESTADISTICA del ítem = peso neto, no unidades.
   Agregar ahí cada NCM nuevo que la DNA pida en kg.
+- **Sufijos de valor KitApp (NA/NB/NC/ZA/ZB) e ISCPOSICION**: no van en el
+  CSV, se eligen a mano. Están guardados por producto en
+  `data/sufijos_confirmados.json` (`sufijos.buscar_sufijos(marca, nombre,
+  ncm)`); entregar siempre la tabla de sufijos por ítem junto con el CSV y
+  guardar los nuevos con `guardar_sufijos`.
 - **Planilla del usuario (cosméticos, etc.)**: si el usuario manda una
   planilla con columnas NCM / DESCRIPCION / R.S / VENCIMIENTO / NOMBRE /
   FABRICANTE / MARCA / UNID / P. TOTAL / P. NETO / P. BRUTO, esa planilla

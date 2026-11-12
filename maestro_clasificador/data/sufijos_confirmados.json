@@ -1,0 +1,22 @@
+{
+  "_nota": "Sufijos de valor KitApp (NA/NB/NC/ZA/ZB) e ISCPOSICION por producto, usados en despachos. Clave = MARCA|NOMBRE (columna NOMBRE de la planilla). 'por_ncm' = criterio general por posicion.",
+  "por_ncm": {
+    "3304.99.90": {"ISCPOSICION": "PREPARACIONES DE BELLEZA", "NA": "segun producto: NA05 antisolares / NA09 aceites de belleza / NA04 exfoliantes / NA00 ninguna", "NB": "segun envase: NB02 dosificadores (gotero/bomba) / NB04 potes / NB07 tubos / NB00 sachet"},
+    "3304.99.10": {"ISCPOSICION": "PREPARACIONES DE BELLEZA", "NA": "NA01 cremas de belleza / NA02 cremas nutritivas / NA03 lociones tonicas", "NB": "segun envase", "NC": "NC00", "ZA": "contenido neto en ml por envase (4 digitos)", "ZB": "envases por caja (6 digitos)"},
+    "3401.30.00": {"ISCPOSICION": "no lleva (si lo pide: LOS DEMAS)", "NA": "no lleva", "NB": "no lleva", "unidad_estadistica": "KG (cantidad estadistica = peso neto)"}
+  },
+  "productos": {
+    "MIXSOON|BEAN HYDROGEL EYE PATCH RENEWAL": {"ncm": "3304.99.90", "NA": "NA00", "NB": "NB04", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON BEAN CLEANSING OIL / ACEITE LIMPIADOR FACIAL 100ML": {"ncm": "3304.99.90", "NA": "NA09", "NB": "NB02", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON BEAN CLEANSING OIL / ACEITE LIMPIADOR FACIAL 20ML": {"ncm": "3304.99.90", "NA": "NA09", "NB": "NB02", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824 y 26002IC04030736P"},
+    "MIXSOON|MIXSOON BEAN ESENCE ESENCIA FACIAL DE FRIJOLES HIDRATANTE Y EXFOLIANTE SUAVE 20ML": {"ncm": "3304.99.90", "NA": "NA04", "NB": "NB02", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON GLACIER WATER HYALURONIC ACID SERUM / SUERO DE ACIDO HIALURONICO DE AGUA GLACIAR 30ML": {"ncm": "3304.99.10", "NA": "NA01", "NB": "NB02", "NC": "NC00", "ZA": "0030", "ZB": "000001", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON DOBLE FUNCION BLANQUEAMIENTO Y ANTIARRUGAS SOYBEAN MILK SERUM / SUERO DE LECHE DE SOJA 30ML": {"ncm": "3304.99.90", "NA": "NA00", "NB": "NB02", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON BEAN SUN SERUM / SERUM SOL DE FRIJOL 50ML": {"ncm": "3304.99.90", "NA": "NA05", "NB": "NB07 (tubo) o NB02 (bomba): confirmar envase", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON BEAN SUN SERUM / SERUM SOL DE FRIJOL 1,5ML": {"ncm": "3304.99.90", "NA": "NA05", "NB": "NB00", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON CENTELLA ASIATICA / CLEANSING FOAM / ESPUMA LIMPIADORA (CENTELLA CLEANSING FOAM 150ML)": {"ncm": "3401.30.00", "NA": "no lleva", "NB": "no lleva", "ISCPOSICION": "no lleva", "despacho": "MS_PY_GAE_005_260824"},
+    "MIXSOON|MIXSOON CENTELLA ASIATICA / CLEANSING FOAM / ESPUMA LIMPIADORA (CENTELLA CLEANSING FOAM 20ML)": {"ncm": "3401.30.00", "NA": "no lleva", "NB": "no lleva", "ISCPOSICION": "no lleva", "despacho": "MS_PY_GAE_005_260824 y 26002IC04030736P"},
+    "MIXSOON|MIXSOON PDRN COLLAGEN PEPTIDE EYE SERUM / SERUM PARA OJOS CON PEPTIDOS": {"ncm": "3304.99.90", "NA": "NA04", "NB": "NB02", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "26002IC04030736P (muestra)"},
+    "MIXSOON|MIXSOON BEAN CREAM/CREMA DE FRIJOL 10 SOBRES 1,5ML": {"ncm": "3304.99.10", "NA": "NA01", "NB": "NB00", "NC": "NC00", "ZA": "0001.5", "ZB": "000010", "ISCPOSICION": "PREPARACIONES DE BELLEZA", "despacho": "26002IC04030736P (muestra)"}
+  }
+}

@@ -30,3 +30,5 @@ IDENTIFICADORES_APRENDIDOS_JSON = os.path.join(DATA_DIR, "identificadores_confir
 
 # NCM cuya cantidad estadistica = peso neto (confirmados por el usuario)
 UNIDAD_ESTADISTICA_KG_JSON = os.path.join(DATA_DIR, "unidad_estadistica_kg.json")
+# Sufijos de valor KitApp e ISCPOSICION por producto (confirmados en despachos)
+SUFIJOS_JSON = os.path.join(DATA_DIR, "sufijos_confirmados.json")

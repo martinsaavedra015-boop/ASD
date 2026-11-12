@@ -4,7 +4,7 @@ import json
 import re
 from collections import OrderedDict
 from config import UNIDAD_ESTADISTICA_KG_JSON
-from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
+from orden_builder import descripcion_oficial, jerarquia_ncm, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 MAX_DESC_DNA = 200
@@ -18,9 +18,16 @@ def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_text
     desc_oficial = descripcion_oficial(codigo_ncm)
     columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
     if len(columna_d) > MAX_DESC_DNA:
-        # La DNA (KIT_ART.LARTMERCAD) admite 200 caracteres: si el texto del
-        # Arancel + cierre se pasa, va directo el item sin el texto del Arancel.
-        columna_d = descripcion_cierre.strip()
+        # La DNA (KIT_ART.LARTMERCAD) admite 200 caracteres. Como en los
+        # despachos oficializados: se corta el texto del Arancel en la primera
+        # coma ("PRODUCTOS Y PREPARACIONES ... PARA EL LAVADO DE LA PIEL");
+        # si aun asi no entra, va directo el item sin el texto del Arancel.
+        corto = " ".join(
+            limpiar_texto(re.split(r"[,;]", desc)[0]) for _, desc in jerarquia_ncm(codigo_ncm)
+        ).strip()
+        columna_d = f'{corto} {descripcion_cierre}'.strip()
+        if not corto or len(columna_d) > MAX_DESC_DNA:
+            columna_d = descripcion_cierre.strip()
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
     cant_estadistica = cant_txt
     if re.sub(r"\D", "", codigo_ncm)[:8] in NCM_ESTADISTICA_KG and peso_neto:

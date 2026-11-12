@@ -120,8 +120,11 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   en KitApp y guardarlo con `guardar_identificador` (queda en
   `data/identificadores_confirmados.json`, versionado).
 - **Descripción máximo 200 caracteres** (KitApp: ORA-12899 en
-  KIT_ART.LARTMERCAD). Si texto del Arancel + cierre se pasa de 200, va
-  directo el ítem (`EN X UNIDAD` + descripción) sin el texto del Arancel.
+  KIT_ART.LARTMERCAD). Si texto del Arancel + cierre se pasa de 200, el
+  texto del Arancel se corta en la primera coma (como en los despachos
+  oficializados: `PRODUCTOS Y PREPARACIONES ORGANICOS TENSOACTIVOS PARA EL
+  LAVADO DE LA PIEL EN 1500 UNIDAD ...`); si aun así no entra, va directo
+  el ítem (`EN X UNIDAD` + descripción) sin el texto del Arancel.
 - **Cantidad estadística en KG**: para los NCM listados en
   `data/unidad_estadistica_kg.json` (confirmados por el usuario, ej.
   3401.30.00) la CANTIDAD ESTADISTICA del ítem = peso neto, no unidades.

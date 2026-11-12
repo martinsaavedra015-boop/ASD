@@ -134,6 +134,10 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   `data/sufijos_confirmados.json` (`sufijos.buscar_sufijos(marca, nombre,
   ncm)`); entregar siempre la tabla de sufijos por ítem junto con el CSV y
   guardar los nuevos con `guardar_sufijos`.
+- **Suma de FOB = total de la carátula, nunca más**: KitApp rechaza el CSV
+  si la suma de los ítems supera lo declarado en la carátula (total de la
+  factura). Si las líneas de la factura no suman exacto su total por
+  redondeo, la diferencia se ajusta en el ítem de mayor valor y se anota.
 - **Planilla del usuario (cosméticos, etc.)**: si el usuario manda una
   planilla con columnas NCM / DESCRIPCION / R.S / VENCIMIENTO / NOMBRE /
   FABRICANTE / MARCA / UNID / P. TOTAL / P. NETO / P. BRUTO, esa planilla

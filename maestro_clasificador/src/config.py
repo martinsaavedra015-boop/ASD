@@ -27,3 +27,6 @@ REGISTRO_NCM_JSON = os.path.join(CACHE_DIR, "ncm_confirmados.json")
 # En data/ (versionado en git), no en cache/: son datos confirmados por el
 # usuario en KitApp y no se pueden regenerar.
 IDENTIFICADORES_APRENDIDOS_JSON = os.path.join(DATA_DIR, "identificadores_confirmados.json")
+
+# NCM cuya cantidad estadistica = peso neto (confirmados por el usuario)
+UNIDAD_ESTADISTICA_KG_JSON = os.path.join(DATA_DIR, "unidad_estadistica_kg.json")

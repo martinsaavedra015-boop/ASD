@@ -1,10 +1,15 @@
 """Agrupa lineas de factura por NCM en items+subitems (punto 46 del
 instructivo maestro) y arma las filas finales listas para el ORDEN."""
+import json
+import re
 from collections import OrderedDict
+from config import UNIDAD_ESTADISTICA_KG_JSON
 from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
-MAX_DESC_DNA = 200  # largo maximo de la descripcion en KitApp (ORA-12899)
+MAX_DESC_DNA = 200
+with open(UNIDAD_ESTADISTICA_KG_JSON, encoding="utf-8") as _f:
+    NCM_ESTADISTICA_KG = {re.sub(r"\D", "", c)[:8] for c in json.load(_f)["ncm"]}  # largo maximo de la descripcion en KitApp (ORA-12899)
 
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
@@ -17,9 +22,12 @@ def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_text
         # Arancel + cierre se pasa, va directo el item sin el texto del Arancel.
         columna_d = descripcion_cierre.strip()
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
+    cant_estadistica = cant_txt
+    if re.sub(r"\D", "", codigo_ncm)[:8] in NCM_ESTADISTICA_KG and peso_neto:
+        cant_estadistica = peso_neto  # unidad estadistica KG: = peso neto
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,
-        "F": formato_decimal(fob_total), "G": cant_txt, "H": cant_txt,
+        "F": formato_decimal(fob_total), "G": cant_txt, "H": cant_estadistica,
         "I": peso_bruto or "", "J": nuevo_usado, "K": pais_origen, "L": pais_procedencia,
         "M": peso_neto or "", "N": marca_libre, "O": nombre_marca,
     }

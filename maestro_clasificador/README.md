@@ -122,6 +122,10 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **Descripción máximo 200 caracteres** (KitApp: ORA-12899 en
   KIT_ART.LARTMERCAD). Si texto del Arancel + cierre se pasa de 200, va
   directo el ítem (`EN X UNIDAD` + descripción) sin el texto del Arancel.
+- **Cantidad estadística en KG**: para los NCM listados en
+  `data/unidad_estadistica_kg.json` (confirmados por el usuario, ej.
+  3401.30.00) la CANTIDAD ESTADISTICA del ítem = peso neto, no unidades.
+  Agregar ahí cada NCM nuevo que la DNA pida en kg.
 - **Planilla del usuario (cosméticos, etc.)**: si el usuario manda una
   planilla con columnas NCM / DESCRIPCION / R.S / VENCIMIENTO / NOMBRE /
   FABRICANTE / MARCA / UNID / P. TOTAL / P. NETO / P. BRUTO, esa planilla

@@ -11,6 +11,9 @@ from config import ARANCEL_XLSX, ARANCEL_CACHE_JSON, IDENTIFICADORES_APRENDIDOS_
 CAPITULO_HDR_RE = re.compile(r"^Cap[ií]tulo\s+\d+$")
 
 
+DUPLICADOS = []
+
+
 def _parsear_arancel():
     wb = openpyxl.load_workbook(ARANCEL_XLSX, data_only=True, read_only=True)
     ws = wb["Arancel"]
@@ -77,6 +80,15 @@ def _parsear_arancel():
             aec = row[2] if len(row) > 2 else None
             anv = row[3] if len(row) > 3 else None
             omc = row[4] if len(row) > 4 else None
+            if codigo in records:
+                # Codigo repetido en el xlsx (error de tipeo de la fuente, ej:
+                # 9401.41.00 "De madera" y otra fila 9401.41.00 "Los demas"
+                # que en realidad es 9401.49.00). Se conserva la PRIMERA fila
+                # y se registra el duplicado para revisar.
+                DUPLICADOS.append((codigo, desc))
+                ultimo_codigo = None
+                i += 1
+                continue
             records[codigo] = {
                 "descripcion": desc, "aec": aec, "anv": anv, "omc": omc,
                 "seccion": cur_seccion, "capitulo": cur_capitulo,

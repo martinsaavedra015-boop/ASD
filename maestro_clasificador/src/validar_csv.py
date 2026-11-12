@@ -42,8 +42,24 @@ def validar(ruta):
     return err, rows, items
 
 
+def validar_xlsx(ruta_xlsx, rows_csv):
+    import openpyxl
+    ws = openpyxl.load_workbook(ruta_xlsx)["ORDEN"]
+    x = [[("" if c is None else str(c)) for c in r] for r in ws.iter_rows(values_only=True)]
+    err = []
+    if x and x[0][0] != "N":
+        err.append("XLSX: la hoja ORDEN tiene fila de titulos")
+    if x != rows_csv:
+        err.append("XLSX: la hoja ORDEN no es identica al CSV")
+    return err
+
+
 if __name__ == "__main__":
     err, rows, items = validar(sys.argv[1])
+    import os
+    xl = sys.argv[1][:-4] + ".xlsx"
+    if os.path.exists(xl):
+        err += validar_xlsx(xl, rows)
     print(f"{len(rows)} filas, {len(items)} items")
     print("OK" if not err else "ERRORES:\n" + "\n".join(err))
     sys.exit(1 if err else 0)

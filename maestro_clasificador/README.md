@@ -91,7 +91,7 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
 - **CSV para aduana: SIN encabezado, SIN BOM y SIN COMILLAS** (ni en la
   descripcion `EN 16 UNIDAD ...` ni entrecomillando campos). El archivo arranca
   directo con la primera fila de item (`N;...`). Nunca agregar la fila de
-  titulos de columna (eso va solo en el XLSX).
+  titulos de columna, NI en el CSV NI en la hoja ORDEN del XLSX.
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,

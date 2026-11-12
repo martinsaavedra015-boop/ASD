@@ -22,16 +22,14 @@ def generar_orden_notas(filas, notas, nombre_archivo):
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "ORDEN"
-    ws.append(ENCABEZADOS)
-    for cell in ws[1]:
-        cell.font = Font(name="Arial", bold=True)
+    # SIN fila de titulos (correccion del usuario): la hoja ORDEN arranca
+    # directo con el primer item, igual que el CSV. Todas las celdas como
+    # TEXTO para que Excel no convierta "07"->7, "004"->4 ni los montos.
     for fila in filas:
         ws.append([fila[c] for c in COL_ORDEN])
     for row in ws.iter_rows(min_row=1):
         for cell in row:
-            cell.font = Font(name="Arial", size=cell.font.size or 10, bold=cell.font.bold)
-    for row in ws.iter_rows(min_row=2, min_col=6, max_col=8):
-        for cell in row:
+            cell.font = Font(name="Arial", size=10)
             cell.number_format = "@"
 
     ws2 = wb.create_sheet("NOTAS")

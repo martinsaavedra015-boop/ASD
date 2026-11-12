@@ -12,7 +12,8 @@ preguntarlas).
 
 ## Correcciones del usuario (NO repetir errores)
 
-- CSV para aduana: **sin fila de encabezado, sin BOM y sin comillas**
+- CSV **y hoja ORDEN del XLSX**: **sin fila de titulos/encabezado**, sin BOM
+  y sin comillas. Celdas del XLSX como texto
   (la descripcion va `... EN 16 UNIDAD DETALLADO EN SUBITEM`, sin ").
 - Peso bruto/neto: **estimar** por item prorrateando los totales de la
   factura (ver README). No dejar en blanco.

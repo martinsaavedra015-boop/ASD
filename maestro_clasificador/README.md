@@ -119,6 +119,13 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   la referencia, NO "corregirlo" a la versión vieja: pedir el identificador
   en KitApp y guardarlo con `guardar_identificador` (queda en
   `data/identificadores_confirmados.json`, versionado).
+- **Planilla del usuario (cosméticos, etc.)**: si el usuario manda una
+  planilla con columnas NCM / DESCRIPCION / R.S / VENCIMIENTO / NOMBRE /
+  FABRICANTE / MARCA / UNID / P. TOTAL / P. NETO / P. BRUTO, esa planilla
+  manda: **un ítem por fila** (sin agrupar por NCM ni subítems), descripción
+  del ítem = texto del Arancel + `EN X UNIDAD` + columna **NOMBRE**, valores
+  a precio completo; un FOC/bonificación va en **A.Deducir** de la carátula,
+  no se prorratea en los ítems.
 - **Búsqueda exhaustiva de subpartida**: antes de resolver en un código
   residual "Los demás", siempre revisar con
   `parse_arancel.listar_subpartidas(partida)` todas las subpartidas

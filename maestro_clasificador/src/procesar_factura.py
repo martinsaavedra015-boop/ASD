@@ -6,12 +6,18 @@ from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, for
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
 
+def _cant_desc(cantidad):
+    """Cantidad para la descripcion: entero si no tiene decimales (nunca
+    "3511.0", el punto esta prohibido en la descripcion)."""
+    return str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad).replace(",", " ")
+
+
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
                 nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
     desc_oficial = descripcion_oficial(codigo_ncm)
     columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
-    cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
+    cant_txt = str(int(cantidad_total)) if float(cantidad_total).is_integer() else formato_decimal(cantidad_total)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,
         "F": formato_decimal(fob_total), "G": cant_txt, "H": cant_txt,
@@ -61,7 +67,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
 
         if len(grupo) == 1:
             linea = grupo[0]
-            cant_str = int(linea["cantidad"]) if unidad_texto == "UNIDAD" else linea["cantidad"]
+            cant_str = _cant_desc(linea["cantidad"])
             cierre = f'EN {cant_str} {unidad_texto} {limpiar_texto(linea["descripcion_factura"])}'
             filas.append(_fila_item(
                 codigo_ncm, linea["cantidad"], linea["fob"], unidad_codigo, unidad_texto,
@@ -71,7 +77,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         else:
             cantidad_total = sum(l["cantidad"] for l in grupo)
             fob_total = sum(l["fob"] for l in grupo)
-            cant_str = int(cantidad_total) if unidad_texto == "UNIDAD" else cantidad_total
+            cant_str = _cant_desc(cantidad_total)
             cierre = f'EN {cant_str} {unidad_texto} DETALLADO EN SUBITEM'
             filas.append(_fila_item(
                 codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,

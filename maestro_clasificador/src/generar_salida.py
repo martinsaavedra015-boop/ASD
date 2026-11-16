@@ -62,10 +62,13 @@ def generar_csv(filas, nombre_archivo):
     por el usuario) — arranca directo con la primera fila del ORDEN. Sin BOM: el sistema de
     aduana lee el BOM pegado a la "N" y rechaza con "TIPO DE ITEM INVALIDO".
     SIN comillas en ningun campo (confirmado por el usuario): ni las de escape
-    del csv ni las de EN "X" "UNIDAD", que en el CSV va como EN X UNIDAD. El
-    XLSX si conserva las comillas del punto 10 del instructivo."""
+    del csv ni las de EN "X" "UNIDAD", que en el CSV va como EN X UNIDAD."""
     ruta_salida = os.path.join(OUTPUT_DIR, nombre_archivo)
     with open(ruta_salida, "w", newline="", encoding="utf-8") as f:
         for fila in filas:
-            f.write(";".join(_valor_csv(fila[c]) for c in COL_ORDEN) + "\r\n")
+            valores = [_valor_csv(fila[c]) for c in COL_ORDEN]
+            largos = [v for v in valores if len(v) > 200]
+            if largos:
+                raise ValueError(f"Campo de mas de 200 caracteres (limite del sistema de aduana): {largos}")
+            f.write(";".join(valores) + "\r\n")
     return ruta_salida

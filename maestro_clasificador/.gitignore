@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
 cache/*.json
+!cache/identificadores_aprendidos.json
+!cache/ncm_confirmados.json
 salidas/*
 !salidas/.gitkeep

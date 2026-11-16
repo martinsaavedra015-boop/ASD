@@ -1,20 +1,24 @@
 """Agrupa lineas de factura por NCM en items+subitems (punto 46 del
 instructivo maestro) y arma las filas finales listas para el ORDEN."""
 from collections import OrderedDict
-from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm
+from orden_builder import descripcion_oficial, limpiar_texto, mapear_unidad, formato_decimal, formatear_ncm, acortar_descripcion
 
 COL_ORDEN = list("ABCDEFGHIJKLMNO")
 
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
-                nombre_marca, peso_bruto, peso_neto, descripcion_cierre):
+                nombre_marca, peso_bruto, peso_neto, descripcion_cierre, cantidad_estadistica=None):
     desc_oficial = descripcion_oficial(codigo_ncm)
-    columna_d = f'{desc_oficial} {descripcion_cierre}'.strip()
+    columna_d = acortar_descripcion(f'{desc_oficial} {descripcion_cierre}'.strip())
     cant_txt = str(int(cantidad_total)) if unidad_texto == "UNIDAD" else formato_decimal(cantidad_total)
+    if cantidad_estadistica is None:
+        est_txt = cant_txt
+    else:
+        est_txt = str(int(cantidad_estadistica)) if float(cantidad_estadistica).is_integer() else formato_decimal(cantidad_estadistica)
     return {
         "A": "N", "B": formatear_ncm(codigo_ncm), "C": acuerdo, "D": columna_d, "E": unidad_codigo,
-        "F": formato_decimal(fob_total), "G": cant_txt, "H": cant_txt,
+        "F": formato_decimal(fob_total), "G": cant_txt, "H": est_txt,
         "I": peso_bruto or "", "J": nuevo_usado, "K": pais_origen, "L": pais_procedencia,
         "M": peso_neto or "", "N": marca_libre, "O": nombre_marca,
     }
@@ -25,7 +29,7 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     instructivo): A=cantidad subitem, B=FOB subitem, C=marca libre,
     D=nombre marca, E=descripcion (verbatim factura), F=cantidad
     estadistica subitem."""
-    desc_limpia = limpiar_texto(descripcion)
+    desc_limpia = acortar_descripcion(limpiar_texto(descripcion))
     return {
         "A": str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad),
         "B": formato_decimal(fob),
@@ -54,7 +58,9 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
     """lineas: lista de dicts ya clasificados, cada uno con:
     codigo_ncm, descripcion_factura, cantidad, unidad_texto_factura, fob,
     pais_origen, pais_procedencia (opcional), nombre_marca, peso_bruto
-    (opcional), peso_neto (opcional).
+    (opcional), peso_neto (opcional), cantidad_estadistica (opcional; por
+    defecto igual a la cantidad declarada; ej. Ballerina: unidades/frascos
+    cuando la unidad declarada es CAJAS).
 
     Devuelve: (filas [lista de dicts columna->valor], notas [lista de str])
     """
@@ -75,26 +81,28 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
         if len(grupo) == 1:
             linea = grupo[0]
             cant_str = int(linea["cantidad"]) if unidad_texto == "UNIDAD" else linea["cantidad"]
-            cierre = f'EN "{cant_str}" "{unidad_texto}" {limpiar_texto(linea["descripcion_factura"])}'
+            cierre = f'EN {cant_str} {unidad_texto} {limpiar_texto(linea["descripcion_factura"])}'
             filas.append(_fila_item(
                 codigo_ncm, linea["cantidad"], linea["fob"], unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
-                nombre_marca, peso_bruto, peso_neto, cierre,
+                nombre_marca, peso_bruto, peso_neto, cierre, linea.get("cantidad_estadistica"),
             ))
         else:
             cantidad_total = sum(l["cantidad"] for l in grupo)
             fob_total = sum(l["fob"] for l in grupo)
+            est_total = (sum(l.get("cantidad_estadistica", l["cantidad"]) for l in grupo)
+                         if any("cantidad_estadistica" in l for l in grupo) else None)
             cant_str = int(cantidad_total) if unidad_texto == "UNIDAD" else cantidad_total
-            cierre = f'EN "{cant_str}" "{unidad_texto}" DETALLADO EN SUBITEM'
+            cierre = f'EN {cant_str} {unidad_texto} DETALLADO EN SUBITEM'
             filas.append(_fila_item(
                 codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,
                 acuerdo, pais_origen, pais_procedencia, nuevo_usado, marca_libre,
-                nombre_marca, peso_bruto, peso_neto, cierre,
+                nombre_marca, peso_bruto, peso_neto, cierre, est_total,
             ))
             for linea in grupo:
                 filas.append(_fila_subitem(
                     linea["cantidad"], linea["fob"], marca_libre, linea["nombre_marca"],
-                    linea["descripcion_factura"], linea["cantidad"],
+                    linea["descripcion_factura"], linea.get("cantidad_estadistica", linea["cantidad"]),
                 ))
             notas.append(
                 f"Partida {codigo_ncm}: {len(grupo)} lineas de factura agrupadas en un item "

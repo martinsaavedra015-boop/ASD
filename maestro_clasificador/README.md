@@ -89,13 +89,36 @@ generar_orden_notas(filas, notas, "ORDEN_NOTAS_ejemplo.xlsx")
   usa `;` como delimitador precisamente para poder llevar comas dentro de
   los campos sin romper la estructura.
 - **CSV sin títulos**: el CSV nunca lleva fila de encabezados — arranca
-  directo con la primera fila del ORDEN (el XLSX sí los lleva).
-- **CSV sin comillas** en ningún campo: el `EN "X" "UNIDAD"` va como
-  `EN X UNIDAD` (el XLSX sí conserva las comillas).
+  directo con la primera fila del ORDEN (el XLSX sí los lleva). Sin BOM.
+- **Descripción máx. 200 caracteres**: el sistema (columna LARTMERCAD) rechaza
+  más de 200. Se recorta en palabra completa conservando el EAN/UPC final.
+- **CSV sin comillas**: ningún campo lleva comillas. El cierre de la
+  descripción del ítem va `EN 147 UNIDAD DETALLADO EN SUBITEM` (sin las
+  comillas del ejemplo del instructivo). Tampoco `;` dentro de un campo.
 - **Mismo NCM = un solo ítem**, aunque el Certificado de Origen traiga
   varias órdenes/DJO para ese NCM — no se separa por orden del C.O.
+- **JCDecaux (JCDECAUX PARAGUAY S.A.)**: país de origen = el de cada línea
+  de factura; país de procedencia **siempre 001 Francia**. Marca JCDECAUX.
+- **Acuerdo Israel-MERCOSUR**: con C.O. del TLC Israel-MERCOSUR el campo
+  ACUERDO va `MERCOSURISRAEL` (TLC MERCOSUR ISRAEL Ley 3857/10, codigo de SOFIA).
+- **Ballerina (NILCOS)**: unidad declarada CAJAS (16) con cantidad = cajas;
+  la **cantidad estadistica** (item y subitem) va en **unidades** (frascos =
+  cajas x unidades por caja, de la lista de empaque) cuando SOFIA pide
+  unidad estadistica UNIDAD (3305.10 / 3305.90). Para 3401.30 (jabon
+  liquido) la unidad estadistica es KILOGRAMO: va el peso neto. Campo opcional
+  `cantidad_estadistica` en cada linea de `procesar_factura`.
+  Subitems Ballerina: **solo la descripcion**, sin el codigo de producto
+  (ej. "BALLERINA NATURAL SHAMPOO ..."; criterio usuario 03/11/2026).
+  Seguro Ballerina: **0,21% del FOB** (criterio usuario; ej. EXP 269/26
+  USD 59,58 sobre FOB 28.374,65).
+- **Codigos de pais** fuera de CODIGO_DE_PAISES.xlsx: siguen la nomenclatura
+  de paises de Eurostat. Confirmados por el usuario: Turquia 052, Rumania 066,
+  Taiwan 736, Uruguay 524. Por la misma tabla: Tailandia 680, Vietnam 690
+  (Camboya 696 y China 720 si estan en el Excel).
 - **NUEVO/USADO**: `2`=nuevo (default), `1`=usado. Nunca "N"/"U".
 - **MARCA LIBRE**: `"ML"` por default.
+- **Sin marca en factura**: el NOMBRE DE MARCA es el **proveedor** (ej. FOSTER),
+  nunca "SIN MARCA" (criterio usuario).
 - **Unidad**: "piezas"/"pza"/"pcs"/"set" casi siempre son **UNIDAD (07)**,
   no PIEZAS (64). PIEZAS solo con justificación explícita puntual.
 - **Descripción del ítem**: arranca desde el nivel de 8 dígitos del

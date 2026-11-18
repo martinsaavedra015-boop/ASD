@@ -17,6 +17,9 @@ preguntarlas).
   (la descripcion va `... EN 16 UNIDAD DETALLADO EN SUBITEM`, sin ").
 - Peso bruto/neto: **estimar** por item prorrateando los totales de la
   factura (ver README). No dejar en blanco.
+- Items: UNO POR NCM (no separar por factura ni por certificado de origen);
+  la autorizacion DINAVISA va agrupada por partida. Si hay varios certificados
+  o facturas, van juntos en el item: CERTIFICADORIGEN=A / B / C.
 - Si llegan facturas comerciales, mandan sobre el despacho provisorio
   (origen por linea, incoterm, fecha).
 

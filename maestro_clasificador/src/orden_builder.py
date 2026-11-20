@@ -15,9 +15,11 @@ def limpiar_texto(texto):
     guiones ni comas en la descripcion, pese al ejemplo con typo del
     instructivo original.)"""
     t = quitar_tildes(texto).upper()
-    t = t.replace('"', "").replace("'", "").replace("(", " ").replace(")", " ")
+    t = t.replace('"', "").replace("'", "").replace("(", " ").replace(")", " ").replace("«", " ").replace("»", " ")
     t = re.sub(r"(?<=\d)\.(?=\d{3}(\D|$))", "", t)  # 1.000 -> 1000 (separador de miles)
     t = re.sub(r"[.,\-;]", " ", t)
+    t = t.encode("ascii", "ignore").decode()  # fuera comillas angulares, simbolos, etc. (CSV solo ASCII)
+    t = re.sub(r"\s+", " ", t).strip()
     t = re.sub(r"\s+", " ", t).strip()
     return t
 

@@ -9,7 +9,7 @@ COL_ORDEN = list("ABCDEFGHIJKLMNO")
 def _cant_desc(cantidad):
     """Cantidad para la descripcion: entero si no tiene decimales (nunca
     "3511.0", el punto esta prohibido en la descripcion)."""
-    return str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad).replace(",", " ")
+    return str(int(cantidad)) if float(cantidad).is_integer() else formato_decimal(cantidad)  # coma decimal (unica coma admitida por validar_csv)
 
 
 def _fila_item(codigo_ncm, cantidad_total, fob_total, unidad_codigo, unidad_texto,

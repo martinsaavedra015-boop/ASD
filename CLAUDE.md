@@ -17,6 +17,7 @@ preguntarlas).
   (la descripcion va `... EN 16 UNIDAD DETALLADO EN SUBITEM`, sin ").
 - Peso bruto/neto: **estimar** por item prorrateando los totales de la
   factura (ver README). No dejar en blanco.
+- Importaciones de MATERIA PRIMA de un programa de produccion (ej. Dulce Hogar): tipo de item **M** (no N) en la columna A (`procesar_factura(..., tipo_item="M")`).
 - Items: UNO POR NCM (no separar por factura ni por certificado de origen);
   la autorizacion DINAVISA va agrupada por partida. Si hay varios certificados
   o facturas, van juntos en el item: CERTIFICADORIGEN=A / B / C.

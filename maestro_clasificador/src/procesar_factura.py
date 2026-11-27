@@ -43,7 +43,8 @@ def _fila_subitem(cantidad, fob, marca_libre, nombre_marca, descripcion, cantida
     }
 
 
-def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre="ML"):
+def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre="ML", tipo_item="N"):
+    """tipo_item: N=normal, M=item materia prima (programa de produccion), G=item producto final."""
     """lineas: lista de dicts ya clasificados, cada uno con:
     codigo_ncm, descripcion_factura, cantidad, unidad_texto_factura, fob,
     pais_origen, pais_procedencia (opcional), nombre_marca, peso_bruto
@@ -99,4 +100,7 @@ def procesar_factura(lineas, acuerdo="SIN ACUERDO", nuevo_usado="2", marca_libre
                 f"Partida {codigo_ncm}: peso bruto/neto en blanco, completar con packing list o B/L."
             )
 
+    if tipo_item != "N":
+        for f in filas:
+            if f["A"] == "N" and f["B"]: f["A"] = tipo_item
     return filas, notas

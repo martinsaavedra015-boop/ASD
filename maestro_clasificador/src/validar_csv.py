@@ -14,13 +14,13 @@ def validar(ruta):
     ok(b'"' not in raw, "tiene comillas")
     ok(b"(" not in raw and b")" not in raw, "tiene parentesis")
     rows = [l.split(";") for l in raw.decode().split("\r\n") if l]
-    ok(rows and rows[0][0] == "N", "la primera fila no es un item (encabezado?)")
+    ok(rows and rows[0][0] in ("N","M","G"), "la primera fila no es un item (encabezado?)")
     ok(all(len(r) == 15 for r in rows), "filas sin 15 columnas")
     dec = re.compile(r"^\d+,\d{2}$")
     f = lambda x: float(x.replace(",", "."))
     items, cur = [], None
     for i, r in enumerate(rows, 1):
-        if r[0] == "N":
+        if r[0] in ("N","M","G"):
             ok(re.match(r"^\d{4}\.\d{2}\.\d{2}(\.\d{3}[A-Z])?$", r[1]), f"fila {i}: NCM {r[1]}")
             ok(re.search(r" EN \d+(,\d+)? \S+", r[3]) and not r[3].startswith("EN "), f"fila {i}: descripcion {r[3]}")
             ok(not re.search(r"[.,\-]", r[3].split(" EN ")[0]), f"fila {i}: signos en descripcion")
@@ -47,7 +47,7 @@ def validar_xlsx(ruta_xlsx, rows_csv):
     ws = openpyxl.load_workbook(ruta_xlsx)["ORDEN"]
     x = [[("" if c is None else str(c)) for c in r] for r in ws.iter_rows(values_only=True)]
     err = []
-    if x and x[0][0] != "N":
+    if x and x[0][0] not in ("N","M","G"):
         err.append("XLSX: la hoja ORDEN tiene fila de titulos")
     if x != rows_csv:
         err.append("XLSX: la hoja ORDEN no es identica al CSV")
